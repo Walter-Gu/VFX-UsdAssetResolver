@@ -7,7 +7,7 @@
 #include "pxr/pxr.h"
 #include "pxr/base/tf/getenv.h"
 #include "pxr/base/tf/pathUtils.h"
-#include <pxr/usd/sdf/layer.h>
+#include "pxr/usd/sdf/layer.h"
 
 #include <iostream>
 #include <vector>

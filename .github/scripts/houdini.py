@@ -197,7 +197,7 @@ def install_sidefx_product(product: str, version: str) -> None:
     hfs_dir_path = ""
     if sidefx_platform == "linux":
         cmd = [houdini_launcher_installer_file_path]
-        status = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        status = subprocess.run(cmd, stdout=subprocess.DEVNULL)
         if status.returncode != 0:
             raise Exception(
                 "Failed to install Houdini Launcher, ran into the following error:\n {error}".format(
@@ -211,7 +211,7 @@ def install_sidefx_product(product: str, version: str) -> None:
         )
         cmd = ["/opt/sidefx/launcher/bin/houdini_installer"]
         cmd.extend(cmd_flags)
-        status = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        status = subprocess.run(cmd, stdout=subprocess.DEVNULL)
         if status.returncode != 0:
             raise Exception(
                 "Failed to install Houdini, ran into the following error:\n {error}".format(
@@ -226,8 +226,7 @@ def install_sidefx_product(product: str, version: str) -> None:
     elif sidefx_platform == "win64":
         status = subprocess.run(
             [houdini_launcher_installer_file_path, "/S"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            stdout=subprocess.DEVNULL,
         )
         if status.returncode != 0:
             raise Exception(
@@ -242,7 +241,7 @@ def install_sidefx_product(product: str, version: str) -> None:
         )
         cmd = [r"C:\Program Files\Side Effects Software\Launcher\bin\houdini_installer.exe"]
         cmd.extend(cmd_flags)
-        status = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        status = subprocess.run(cmd, stdout=subprocess.DEVNULL)
         if status.returncode != 0:
             raise Exception(
                 "Failed to install Houdini, ran into the following error:\n {error}".format(

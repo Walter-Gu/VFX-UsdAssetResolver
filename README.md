@@ -6,14 +6,13 @@
 [![Build USD Asset Resolvers against Houdini](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/build_houdini.yml/badge.svg)](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/build_houdini.yml)
 [![Build USD Asset Resolvers against Maya](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/build_maya.yml/badge.svg)](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/build_maya.yml)
 
-
 This repository holds reference implementations for [Usd](https://openusd.org/release/index.html) [asset resolvers](https://openusd.org/release/glossary.html#usdglossary-assetresolution). The resolvers are compatible with the AR 2.0 standard proposed in the [Asset Resolver 2.0 Specification](https://openusd.org/release/wp_ar2.html). As the Usd documentation offers quite a good overview over the overall asset resolution system, we will not be covering it in this repository's documentation.
 
 ## Installation
 To build the various resolvers, follow the instructions in the [install guide](https://lucascheller.github.io/VFX-UsdAssetResolver/installation/requirements.html). 
 
 > [!NOTE]
-> This guide currently covers compiling against Houdini/Maya on Linux and Windows. Alternatively you can also download a pre-compiled builds on our [release page](https://github.com/LucaScheller/VFX-UsdAssetResolver/releases). To load the resolver, you must specify a few environment variables, see our [environment variables](https://lucascheller.github.io/VFX-UsdAssetResolver/resolvers/overview.html#environment-variables) section for more details.
+> This guide currently covers compiling against standalone/Houdini/Maya/Nuke on Linux and Windows. Alternatively you can also download a pre-compiled builds on our [release page](https://github.com/LucaScheller/VFX-UsdAssetResolver/releases) (except for Nuke). To load the resolver, you must specify a few environment variables, see our [environment variables](https://lucascheller.github.io/VFX-UsdAssetResolver/resolvers/overview.html#environment-variables) section for more details.
 
 > [!IMPORTANT]
 > We also offer a quick install method for Houdini/Maya that does the download of the compiled resolvers and environment variable setup for you. This is ideal if you want to get your hands dirty right away and you don't have any C++ knowledge or extensive USD developer knowledge. If you are a small studio, you can jump right in and play around with our resolvers and prototype them further to make it fit your production needs.
@@ -54,7 +53,7 @@ Post of relevance in the Usd-Interest Forum to this repo:
 - [AR 2.0: CreateDefaultContextForAsset replacement?
 ](https://groups.google.com/g/usd-interest/c/7Aqv3k-V_DU/m/HPz7dSZLBQAJ)
 
-Please consider contributing back to the Usd project in the  official [Usd Repository](https://github.com/PixarAnimationStudios/USD) and via the [Usd User groups](https://wiki.aswf.io/display/WGUSD/USD+Working+Group).
+Please consider contributing back to the Usd project in the  official [USD Repository](https://github.com/PixarAnimationStudios/USD) and via the [USD User groups](https://wiki.aswf.io/display/WGUSD/USD+Working+Group).
 
 Feel free to fork this repository and share improvements or further resolvers.
 If you run into issues, please flag them by [submitting a ticket](https://github.com/LucaScheller/VFX-UsdAssetResolver/issues/new).

@@ -1,11 +1,11 @@
 # Building
-Currently we support building against Houdini and Maya on Linux and Windows. If you don't want to self-compile, you can also download pre-compiled builds on our [release page](https://github.com/LucaScheller/VFX-UsdAssetResolver/releases). To load the resolver, you must specify a few environment variables, see our [Resolvers > Environment Variables](../resolvers/overview.md#environment-variables) section for more details. 
+Currently we support building against standalone, Houdini, Maya, Nuke on Linux and Windows. If you don't want to self-compile, you can also download pre-compiled builds on our [release page](https://github.com/LucaScheller/VFX-UsdAssetResolver/releases). To load the resolver, you must specify a few environment variables, see our [Resolvers > Environment Variables](../resolvers/overview.md#environment-variables) section for more details. 
 
 ## Setting up our build environment
 After installing the [requirements](./requirements.md), we first need to set a couple of environment variables that our cmake file depends on.
 
 ### Using our convenience setup script
-On Linux we provide a bash script that you can source that sets up our development environment. This sets a few environment variables needed to build the resolver as well as for Houdini/Maya to load it.
+On Linux we provide a bash script that you can source that sets up our development environment. This sets a few environment variables needed to build the resolver as well as for your USD capable application to load it.
 This can be done by running the following from the source directory:
 ~~~admonish info title=""
 ```bash
@@ -13,7 +13,7 @@ source setup.sh
 ```
 ~~~
 
-In the [setup.sh](https://github.com/LucaScheller/VFX-UsdAssetResolver/blob/main/setup.sh) file you can define what resolver to compile by setting the `RESOLVER_NAME` variable to one of the resolvers listed in [resolvers](../resolvers/overview.md) in camelCase syntax (for example `fileResolver` or `pythonResolver`). Here you'll also have to define what Houdini/Maya version to compile against.
+In the [setup.sh](https://github.com/LucaScheller/VFX-UsdAssetResolver/blob/main/setup.sh) file you can define what resolver to compile by setting the `AR_RESOLVER_NAME` variable to one of the resolvers listed in [resolvers](../resolvers/overview.md) in camelCase syntax (for example `fileResolver` or `pythonResolver`). Here you'll also have to define what application version to compile against.
 
 It will then automatically set the `PATH`, `PYTHONPATH`, `PXR_PLUGINPATH_NAME` and `LD_LIBRARY_PATH` environment variables to the correct paths so that after your run the compile, the resolver will be loaded correctly (e.g. if you launch Houdini via `houdinifx`, it will load everything correctly). The build process also logs this information again.
 
@@ -25,33 +25,71 @@ If you don't want to use our convenience script, you can also setup the environm
 ~~~admonish info title=""
 ```bash
 # Linux
+## Standalone
+export AR_DCC_NAME=standalone
+export USD_STANDALONE_ROOT="/path/to/usd/standalone/root"
 ## Houdini
 export AR_DCC_NAME=houdini
-export HFS=<PathToHoudiniRoot> # For example "/opt/hfs<HoudiniVersion>"
+export HFS="/path/to/houdini/root" # For example "/opt/hfs<HoudiniVersion>"
 ## Maya
 export AR_DCC_NAME=maya
 export MAYA_USD_SDK_ROOT="/path/to/maya/usd/sdk/root/.../mayausd/USD"
 export MAYA_USD_SDK_DEVKIT_ROOT="/path/to/maya/usd/sdk/root/.../content/of/devkit.zip"
 export PYTHON_ROOT="/path/to/python/root"
+## Nuke
+export AR_DCC_NAME=nuke
+export NUKE_ROOT="/path/to/nuke/root"
+export BOOST_ROOT="/path/to/boost/root" # The .../include/boost folder must be renamed to .../include/foundryboost
+export TBB_ROOT="/path/to/tbb/root"
 ## Resolver
 export AR_RESOLVER_NAME=fileResolver
 
 # Windows
+## Standalone
+set AR_DCC_NAME=standalone
+set USD_STANDALONE_ROOT="/path/to/usd/standalone/root"
 ## Houdini
 set AR_DCC_NAME=houdini
-set HFS=<PathToHoudiniRoot> # For example "C:\Program Files\Side Effects Software\<HoudiniVersion>"
+set HFS="/path/to/houdini/root" # For example "C:\Program Files\Side Effects Software\<HoudiniVersion>"
 ## Maya
 set AR_DCC_NAME=maya
 set MAYA_USD_SDK_ROOT="/path/to/maya/usd/sdk/root/.../mayausd/USD"
 set MAYA_USD_SDK_DEVKIT_ROOT="/path/to/maya/usd/sdk/root/.../content/of/devkit.zip"
 set PYTHON_ROOT="/path/to/python/root"
+## Nuke
+set AR_DCC_NAME=nuke
+set NUKE_ROOT="/path/to/nuke/root"
+set BOOST_ROOT="/path/to/boost/root" # The .../include/boost folder must be renamed to .../include/foundryboost
+set TBB_ROOT="/path/to/tbb/root"
 ## Resolver
 set AR_RESOLVER_NAME=fileResolver
 ```
 ~~~
 
 ## Running the build
+
 To run the build, run:
+
+~~~admonish info title=""
+```bash
+# Linux
+./build.sh
+# Windows
+build.bat
+```
+~~~
+
+The `build.sh/.bat` files also contain (commented out) the environment definition part above, so alternatively just comment out the lines and you are good to go.
+
+Depending on app/USD build you are compiling against, there might be additional requirements to be aware of as documented below.
+
+### Standalone
+
+To build against a standalone/pre-built USD distribution, simply specify the root folder via the `AR_USD_STANDALONE_ROOT` environment variable.
+
+We recommend using [Nvidia's pre-compiled OpenUSD builds](https://developer.nvidia.com/usd) to avoid having to do a full custom USD build.
+
+### Houdini
 
 ~~~admonish warning title="Houdini GCC ABI Change"
 Starting with Houdini 20, SideFX is offering gcc 11 builds that don't use the old Lib C ABI. Our automatic GitHub builds make use of this starting Houdini 20 and upwards.
@@ -70,21 +108,38 @@ See the official [Release Notes](https://www.sidefx.com/docs/houdini/news/20/pla
 ```
 ~~~
 
-~~~admonish info title=""
-```bash
-# Linux
-./build.sh
-# Windows
-build.bat
-```
-~~~
+### Maya
 
-The `build.sh/.bat` files also contain (commented out) the environment definition part above, so alternatively just comment out the lines and you are good to go.
+Maya does not ship with python headers, we therefore need to self-compile python with the exact build version of the python build included with Maya distribution we intend to use.
+
+Our build scripts then links against `PYTHON_ROOT` env var specified python version. Alternatively the cmake file can be adjusted to only use the headers and link against the libs from Maya.
+
+On Windows, the standard python installer ships with headers, so we can leverage those instead and avoid compilation.
+
+On Linux, we either compile it ourselves or use our system package manager to install our python developer packages. This may not be available for all package managers, which is why we recommend building python ourselves.
+
+### Nuke
+
+Nuke has two additional requirements:
+
+- TBB: Nuke itself does not ship with the necessary TBB headers, instead only with the libs. We either have to self compile these or alternatively we can link to an existing compatible TBB header folder. We then have to specify the root folder by setting the `TBB_ROOT` env var.
+- Boost: Nuke itself does not ship with the necessary boost headers, instead only with the libs. These are namespaced (file and symbol-wise) to `foundryboost`. To successfully compile, we'll have to self-compile boost and then copy/symlink the `<root>/include/boost` folder to `<root>/include/foundryboost`. Alternatively we can copy an existing compatible boost header folder to a new location and also copy/symlink it `<root>/include/foundryboost`. This way we have identical headers for both symbols. We then have to specify the root folder by setting the `BOOST_ROOT` env var.
+
+Here is the boost situation explain in more detail:
+- Nuke does not ship with boost headers
+- Nuke namespaces boost symbols to foundryboost
+- Nuke doesn't namespace boost (headers/files) itself, instead it namespaces maps them (by means unknown to us).
+
+This way it can include the standard USD headers (that use <boost/...>), but compile to foundryboost symbols.
+To solve this, we add a preprocessor definition to namespace boost to foundryboost and we duplicate/symlink
+the <boost root>/include/boost to <boost root>/include/foundryboost. This way it can apply the namespace mapping
+correctly. (A preprocessor definition does not affect #include statements, we therefore need to have both folders
+so that include file searching works and namespace mapping gets applied in the compiled library).
 
 ## Testing the build
-Unit tests are automatically run post-build on Linux using the Houdini/Maya version you are using. You can find each resolvers tests in its respective src/<ResolverName>/testenv folder.
+Unit tests are automatically run post-build on Linux using the standalone/Houdini/Maya/Nuke version you are using. You can find each resolvers tests in its respective src/`<ResolverName>`/testenv folder.
 
-Alternatively you can run Houdini/Maya and check if the resolver executes correctly. If you didn't use our convenience script as noted above, you'll have to specify a few environment variables, so that our plugin is correctly detected by USD.
+Alternatively you can run your application and check if the resolver executes correctly. If you didn't use our convenience script as noted above, you'll have to specify a few environment variables, so that our plugin is correctly detected by USD.
 
 Head over to our [Resolvers > Environment Variables](../resolvers/overview.md#environment-variables) section on how to do this.
 

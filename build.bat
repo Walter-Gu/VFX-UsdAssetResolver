@@ -1,11 +1,11 @@
 REM Clear current session log 
 cls
 REM Source environment (Uncomment lines starting with "set" if you current env does not have these defined.)
-REM set HFS=C:\Program Files\Side Effects Software\<InsertHoudiniVersion>
 REM Define Resolver > Has to be one of 'fileResolver'/'pythonResolver'/'cachedResolver'/'httpResolver'
 REM set AR_RESOLVER_NAME=cachedResolver
-REM Define App
+REM Define App (for other apps, see documentation)
 REM set AR_DCC_NAME=HOUDINI
+REM set HFS=C:\Program Files\Side Effects Software\<InsertHoudiniVersion>
 REM Clear existing build data and invoke cmake
 rmdir /S /Q build
 rmdir /S /Q dist

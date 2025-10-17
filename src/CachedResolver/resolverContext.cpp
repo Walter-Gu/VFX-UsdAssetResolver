@@ -8,7 +8,7 @@
 #include "pxr/base/tf/getenv.h"
 #include "pxr/base/tf/pathUtils.h"
 #include "pxr/base/tf/pyInvoke.h"
-#include <pxr/usd/sdf/layer.h>
+#include "pxr/usd/sdf/layer.h"
 
 #include <iostream>
 #include <mutex>

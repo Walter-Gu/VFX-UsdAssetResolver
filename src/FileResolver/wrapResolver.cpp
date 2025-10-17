@@ -1,7 +1,6 @@
-
 #include "resolver.h"
 
-#include <pxr/pxr.h>
+#include "pxr/pxr.h"
 
 #include "boost_include_wrapper.h"
 #include BOOST_INCLUDE(python.hpp)

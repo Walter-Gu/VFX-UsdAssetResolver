@@ -24,9 +24,10 @@ target_link_libraries(${AR_HTTPRESOLVER_TARGET_LIB}
 # Headers
 target_include_directories(${AR_HTTPRESOLVER_TARGET_LIB}
     PUBLIC
-    ${AR_PYTHON_INCLUDE_DIR}
-    ${AR_PXR_INCLUDE_DIR}
-    ${AR_BOOST_INCLUDE_DIR}
+        ${AR_PYTHON_INCLUDE_DIR}
+        ${AR_TBB_INCLUDE_DIR}
+        ${AR_BOOST_INCLUDE_DIR}
+        ${AR_PXR_INCLUDE_DIR}
 )
 # Props
 # Remove default "lib" prefix

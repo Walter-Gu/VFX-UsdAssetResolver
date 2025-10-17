@@ -179,11 +179,11 @@ def install_autodesk_product(product, version, dependency_dir_path):
         os.chmod(python_configure_file_path, 0o777)
         logging.info("Configuring Python Build")
         command = [python_configure_file_path, "--enable-shared", "--prefix", python_install_dir_path]
-        process = subprocess.check_call(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=python_version_dir_path)
+        subprocess.check_call(command, stdout=subprocess.DEVNULL, cwd=python_version_dir_path)
         logging.info("Building Python")
-        process = subprocess.check_call(["make"], stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, cwd=python_version_dir_path)
+        subprocess.check_call(["make"], stdout=subprocess.DEVNULL, cwd=python_version_dir_path)
         logging.info("Installing Python")
-        process = subprocess.check_call(["make", "install"], stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, cwd=python_version_dir_path)
+        subprocess.check_call(["make", "install"], stdout=subprocess.DEVNULL, cwd=python_version_dir_path)
         # Maya USD SDK
         maya_usd_sdk_releases = get_autodesk_maya_usd_sdk_releases(autodesk_platform, autodesk_maya_version)
         maya_usd_sdk_latest_release = maya_usd_sdk_releases[0]
@@ -196,13 +196,13 @@ def install_autodesk_product(product, version, dependency_dir_path):
         os.chmod(maya_usd_sdk_download_file_path, 777)
         os.makedirs(maya_usd_sdk_extract_dir_path)
         command = [maya_usd_sdk_download_file_path, "--tar", "xvf", "--directory", maya_usd_sdk_extract_dir_path]
-        process = subprocess.check_call(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.check_call(command, stdout=subprocess.DEVNULL)
         maya_usd_sdk_extract_rpm_file_name = [f for f in os.listdir(maya_usd_sdk_extract_dir_path) if f.endswith(".rpm")][0]
         maya_usd_sdk_extract_rpm_file_path = os.path.join(maya_usd_sdk_extract_dir_path, maya_usd_sdk_extract_rpm_file_name)
         # command = ["rpm", "-e", maya_usd_sdk_extract_rpm_file_name.replace(".rpm", "")]
         # process = subprocess.check_call(command, cwd=maya_usd_sdk_extract_dir_path)
         command = ["rpm", "-i", "--nodeps","--prefix", maya_usd_sdk_extract_dir_path, maya_usd_sdk_extract_rpm_file_path]
-        process = subprocess.check_call(command, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, cwd=maya_usd_sdk_extract_dir_path)
+        subprocess.check_call(command, stdout=subprocess.DEVNULL, cwd=maya_usd_sdk_extract_dir_path)
         # Maya now ships with multiple USD builds, we choose the first one implicitly (as this is how Autodesk resolve the current 'default').
         maya_usd_sdk_extract_usd_dir_path = glob.glob("{root_dir}{sep}**{sep}mayausd{sep}USD*".format(root_dir=maya_usd_sdk_extract_dir_path, sep=os.path.sep), recursive=True)[0]
         maya_usd_sdk_extract_usd_dir_path = os.path.join(maya_usd_sdk_extract_dir_path, maya_usd_sdk_extract_usd_dir_path)
@@ -224,7 +224,7 @@ def install_autodesk_product(product, version, dependency_dir_path):
         command = [python_download_file_path, "/passive", "/quiet", "InstallAllUsers=0",
                    "TargetDir={}".format(python_install_dir_path), "AssociateFiles=0",
                    "Shortcuts=0", "Include_doc=0", "Include_launcher=0", "Include_test=0"]
-        process = subprocess.check_call(command,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.check_call(command,  stdout=subprocess.DEVNULL)
         # 7Zip
         serverZip_version = "2301"
         serverZip_download_url = SEVENZIP_WINDOWS_DOWNLOAD_URL[serverZip_version]
@@ -233,7 +233,7 @@ def install_autodesk_product(product, version, dependency_dir_path):
         download_file(serverZip_download_file_path, serverZip_download_url)
         logging.info("Installing 7zip")
         command = [serverZip_download_file_path, "/S", "/D={}".format(sevenZip_install_dir_path)]
-        process = subprocess.check_call(command,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.check_call(command,  stdout=subprocess.DEVNULL)
         serverZip_exe_file_path = os.path.join(sevenZip_install_dir_path, "7z.exe")
         # Maya USD SDK
         maya_usd_sdk_releases = get_autodesk_maya_usd_sdk_releases(autodesk_platform, autodesk_maya_version)
@@ -244,10 +244,10 @@ def install_autodesk_product(product, version, dependency_dir_path):
         logging.info("Downloading Maya USD SDK (Release {})".format(maya_usd_sdk_version))
         download_file(maya_usd_sdk_download_file_path, maya_usd_sdk_download_url)
         command = [serverZip_exe_file_path, "x", maya_usd_sdk_download_file_path, "-o{}".format(maya_usd_sdk_extract_dir_path)]
-        process = subprocess.check_call(command,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.check_call(command,  stdout=subprocess.DEVNULL)
         logging.info("Installing Maya USD SDK")
         command = ["msiexec", "/i", os.path.join(maya_usd_sdk_extract_dir_path, "MayaUSD.msi"), "/quiet", "/passive", "INSTALLDIR={}".format(maya_usd_sdk_extract_dir_path)]
-        process = subprocess.check_call(command,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.check_call(command,  stdout=subprocess.DEVNULL)
         maya_usd_sdk_extract_usd_dir_path = glob.glob("{root_dir}{sep}**{sep}mayausd{sep}USD*".format(root_dir=maya_usd_sdk_extract_dir_path, sep=os.path.sep), recursive=True)[0]
         maya_usd_sdk_extract_usd_dir_path = os.path.join(maya_usd_sdk_extract_dir_path, maya_usd_sdk_extract_usd_dir_path)
         os.rename(maya_usd_sdk_extract_usd_dir_path, maya_usd_sdk_install_dir_path)

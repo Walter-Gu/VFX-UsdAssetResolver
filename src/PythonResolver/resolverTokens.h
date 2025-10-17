@@ -3,8 +3,8 @@
 
 #include "api.h"
 
-#include <pxr/pxr.h>
-#include <pxr/base/tf/staticTokens.h>
+#include "pxr/pxr.h"
+#include "pxr/base/tf/staticTokens.h"
 
 #include <vector>
 

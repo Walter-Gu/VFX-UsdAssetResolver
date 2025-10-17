@@ -105,15 +105,15 @@ def install_standalone_product(product, version, dependency_dir_path):
         download_file(serverZip_download_file_path, serverZip_download_url)
         logging.info("Installing 7zip")
         command = [serverZip_download_file_path, "/S", "/D={}".format(sevenZip_install_dir_path)]
-        process = subprocess.check_call(command,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.check_call(command,  stdout=subprocess.DEVNULL)
         serverZip_exe_file_path = os.path.join(sevenZip_install_dir_path, "7z.exe")
         # Unzip
         command = [serverZip_exe_file_path, "x", usd_standalone_download_file_path, "-o{}".format(usd_standalone_install_dir_path)]
-        process = subprocess.check_call(command,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.check_call(command,  stdout=subprocess.DEVNULL)
     elif standalone_platform == "Linux":
         # Unzip
         command = ["7z", "x", f"-o{usd_standalone_install_dir_path}", usd_standalone_download_file_path]
-        process = subprocess.check_call(command,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.check_call(command,  stdout=subprocess.DEVNULL)
 
     # Store configuration
     python_version = os.path.basename(usd_standalone_download_url).split(".")[1]
