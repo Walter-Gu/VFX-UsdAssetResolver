@@ -41,6 +41,7 @@ export AR_DCC_NAME=nuke
 export NUKE_ROOT="/path/to/nuke/root"
 export BOOST_ROOT="/path/to/boost/root" # The .../include/boost folder must be renamed to .../include/foundryboost
 export TBB_ROOT="/path/to/tbb/root"
+export PYTHON_ROOT="/path/to/python/root" # Windows only
 ## Resolver
 export AR_RESOLVER_NAME=fileResolver
 
@@ -61,6 +62,7 @@ set AR_DCC_NAME=nuke
 set NUKE_ROOT="/path/to/nuke/root"
 set BOOST_ROOT="/path/to/boost/root" # The .../include/boost folder must be renamed to .../include/foundryboost
 set TBB_ROOT="/path/to/tbb/root"
+set PYTHON_ROOT="/path/to/python/root" # Windows only
 ## Resolver
 set AR_RESOLVER_NAME=fileResolver
 ```
@@ -120,10 +122,10 @@ On Linux, we either compile it ourselves or use our system package manager to in
 
 ### Nuke
 
-Nuke has two additional requirements:
-
-- TBB: Nuke itself does not ship with the necessary TBB headers, instead only with the libs. We either have to self compile these or alternatively we can link to an existing compatible TBB header folder. We then have to specify the root folder by setting the `TBB_ROOT` env var.
-- Boost: Nuke itself does not ship with the necessary boost headers, instead only with the libs. These are namespaced (file and symbol-wise) to `foundryboost`. To successfully compile, we'll have to self-compile boost and then copy/symlink the `<root>/include/boost` folder to `<root>/include/foundryboost`. Alternatively we can copy an existing compatible boost header folder to a new location and also copy/symlink it `<root>/include/foundryboost`. This way we have identical headers for both symbols. We then have to specify the root folder by setting the `BOOST_ROOT` env var.
+Nuke has the following additional requirements:
+- Python (Windows Only): Nuke itself does not ship with the necessary python headers on Windows, instead only with the libs. We either have to self compile or alternatively link to an existing compatible python header folder. Our build script expects the root folder to by specified by the `PYTHON_ROOT` env var.
+- TBB: Nuke itself does not ship with the necessary TBB headers, instead only with the libs. We either have to self compile or alternatively link to an existing compatible TBB header folder. Our build script expects the root folder to by specified by the `TBB_ROOT` env var.
+- Boost: Nuke itself does not ship with the necessary boost headers, instead only with the libs. These are namespaced (file and symbol-wise) to `foundryboost`. To successfully compile, we'll have to self-compile boost and then copy/symlink the `<root>/include/boost` folder to `<root>/include/foundryboost`. Alternatively we can copy an existing compatible boost header folder to a new location and also copy/symlink it `<root>/include/foundryboost`. This way we have identical headers for both symbols. Our build script expects the root folder to by specified by the `BOOST_ROOT` env var.
 
 Here is the boost situation explain in more detail:
 - Nuke does not ship with boost headers
