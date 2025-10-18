@@ -151,6 +151,8 @@ class Resolver:
         """
         if not assetPath:
             return assetPath
+        if Sdf.Layer.IsAnonymousLayerIdentifier(assetPath):
+            return assetPath
         if not anchorAssetPath:
             return os.path.normpath(assetPath)
         anchoredAssetPath = _AnchorRelativePath(anchorAssetPath.GetPathString(), assetPath)
@@ -172,6 +174,8 @@ class Resolver:
         """
         if not assetPath:
             return assetPath
+        if Sdf.Layer.IsAnonymousLayerIdentifier(assetPath):
+            return assetPath
         if _IsRelativePath(assetPath):
             if anchorAssetPath:
                 return os.path.normpath(_AnchorRelativePath(anchorAssetPath.GetPathString(), assetPath))
@@ -191,6 +195,8 @@ class Resolver:
         """
         if not assetPath:
             return Ar.ResolvedPath()
+        if Sdf.Layer.IsAnonymousLayerIdentifier(assetPath):
+            return Ar.ResolvedPath(assetPath)
         if _IsRelativePath(assetPath):
             if Resolver._IsContextDependentPath(assetPath):
                 for data in [serializedContext, serializedFallbackContext]:
@@ -228,6 +234,9 @@ class Resolver:
         Returns:
             Ar.ResolvedPath: The resolved path.
         """
+        if Sdf.Layer.IsAnonymousLayerIdentifier(assetPath):
+            return Ar.ResolvedPath(assetPath)
+
         return Ar.ResolvedPath(assetPath if not assetPath else os.path.abspath(os.path.normpath(assetPath)))
 
     @staticmethod

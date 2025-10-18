@@ -4,10 +4,12 @@ import os
 import re
 from functools import wraps
 
+from pxr import Sdf
+
 # Init logger
 logging.basicConfig(format="%(asctime)s %(message)s", datefmt="%Y/%m/%d %I:%M:%S%p")
 LOG = logging.getLogger("Python | {file_name}".format(file_name=__name__))
-LOG.setLevel(level=logging.INFO)
+LOG.setLevel(level=logging.DEBUG)
 
 # Globals
 ROOT_DIR_PATH = os.path.dirname(os.path.dirname(__file__))
@@ -71,7 +73,7 @@ class Resolver:
         entity_element = os.path.basename(assetPath).split("_")[0]
         entity_version = REGEX_VERSION.search(os.path.basename(assetPath)).groups()[0]
 
-        remapped_relative_path_identifier = f"{RELATIVE_PATH_IDENTIFIER_PREFIX}{entity_type}/{entity_identifier}?{entity_element}-{entity_version}"
+        remapped_relative_path_identifier = f"{RELATIVE_PATH_IDENTIFIER_PREFIX}{entity_type}/{entity_identifier}?{entity_element}_{entity_version}"
         resolver.AddCachedRelativePathIdentifierPair(anchoredAssetPath, remapped_relative_path_identifier)
 
         # If you don't want this identifier to be passed through to ResolverContext.ResolveAndCache
@@ -117,6 +119,9 @@ class ResolverContext:
         LOG.debug(
             "::: ResolverContext.ResolveAndCache | {} | {}".format(assetPath, context.GetCachingPairs())
         )
+        if Sdf.Layer.IsAnonymousLayerIdentifier(assetPath):
+            return assetPath
+
         resolved_asset_path = ""
         if assetPath.startswith(RELATIVE_PATH_IDENTIFIER_PREFIX):
             base_identifier = assetPath[len(RELATIVE_PATH_IDENTIFIER_PREFIX):]

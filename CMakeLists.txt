@@ -450,7 +450,7 @@ endif()
 # Status
 message(STATUS "--- Usd Resolver Build Info Start ---")
 message(NOTICE "Detected Libs:")
-message(NOTICE "- DCC: ${AR_DCC_NAME}")
+message(NOTICE "- DCC: $ENV{AR_DCC_NAME}")
 message(NOTICE "- Python: ${AR_PYTHON_LIB}")
 message(NOTICE "- Boost: Python ${AR_BOOST_PYTHON_LIB}")
 message(STATUS "--- Usd Resolver Build Info End ---")

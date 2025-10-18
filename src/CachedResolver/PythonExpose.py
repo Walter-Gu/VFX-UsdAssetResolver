@@ -3,7 +3,7 @@ import logging
 import os
 from functools import wraps
 
-from pxr import Ar
+from pxr import Ar, Sdf
 
 
 # Init logger
@@ -118,6 +118,9 @@ class ResolverContext:
         # To clear the context cache call:
         context.ClearCachingPairs()
         """
+        if Sdf.Layer.IsAnonymousLayerIdentifier(assetPath):
+            context.AddCachingPair(assetPath, assetPath)
+            return assetPath
         """The code below is only needed to verify that UnitTests work."""
         UnitTestHelper.resolve_and_cache_call_counter += 1
         resolved_asset_path = "/some/path/to/a/file.usd"
