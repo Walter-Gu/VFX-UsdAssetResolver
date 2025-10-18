@@ -174,7 +174,7 @@ class TestArResolver(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir_path:
             # Get resolver
             resolver = Ar.GetResolver()
-            cached_resolver = Ar.GetUnderlyingResolver()
+            file_resolver = Ar.GetUnderlyingResolver()
             # Create files
             layer_a_identifier = "layer_a.usd"
             layer_a_file_path = os.path.join(temp_dir_path, layer_a_identifier)
@@ -208,7 +208,7 @@ class TestArResolver(unittest.TestCase):
                 resolved_path = resolver.Resolve(layer_b_file_path)
                 self.assertEqual(resolved_path.GetPathString(), layer_b_file_path)
                 self.assertTrue(os.path.isabs(resolved_path.GetPathString()))
-                cached_resolver.SetExposeAbsolutePathIdentifierState(True)
+                file_resolver.SetExposeAbsolutePathIdentifierState(True)
                 resolved_path = resolver.Resolve(layer_b_file_path)
                 self.assertEqual(resolved_path.GetPathString(), layer_a_file_path)
                 self.assertTrue(os.path.isabs(resolved_path.GetPathString()))
@@ -217,7 +217,7 @@ class TestArResolver(unittest.TestCase):
                 resolved_path = resolver.Resolve(layer_b_file_path)
                 self.assertEqual(resolved_path.GetPathString(), layer_c_file_path)
                 self.assertTrue(os.path.isabs(resolved_path.GetPathString()))
-                cached_resolver.SetExposeAbsolutePathIdentifierState(False)
+                file_resolver.SetExposeAbsolutePathIdentifierState(False)
                 # Make sure if the feature is off, absolute paths still get resolved as usual.
                 ctx.ClearMappingPairs()
                 resolved_path = resolver.Resolve(layer_a_file_path)

@@ -25,8 +25,8 @@ then
     fi
     if [ "$AR_DCC_NAME" == "NUKE" ]; then
         export NUKE_ROOT="/path/to/nuke/root"
-        export TBB_ROOT=$REZ_TBB_ROOT
-        export BOOST_ROOT=$REZ_BOOST_ROOT
+        export TBB_ROOT="/path/to/tbb/root"
+        export BOOST_ROOT="/path/to/boost/root"
     fi
     # Source env
     export PYTHONPATH=${REPO_ROOT}/dist/${AR_RESOLVER_NAME}/lib/python:${PYTHONPATH}
