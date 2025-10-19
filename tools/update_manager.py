@@ -621,9 +621,16 @@ class UpdateManager(object):
             with open(launch_file_path, "w") as launch_file:
                 lines = []
                 lines.append("#!/bin/bash")
-                # Environment
-                lines.append("# Setup environment")
-                # UpdateManager
+                # Source App
+                if product_name == "houdini":
+                    lines.append("# Setup Houdini")
+                    lines.append(
+                        "pushd '{}' && source houdini_setup && popd".format(
+                            os.environ["HFS"]
+                        )
+                    )
+                # Source Resolver
+                lines.append("# Setup Resolver")
                 lines.append(
                     "export {}={}".format(ENV_USD_ASSET_RESOLVER, directory_path)
                 )
@@ -636,21 +643,12 @@ class UpdateManager(object):
                             env_name=env_name, env_value=env_value, sep=os.pathsep
                         )
                     )
+                # Launch App
+                lines.append("# Launch {app}".format(app=product_name.title()))
                 if product_name == "houdini":
-                    # App
-                    lines.append("# Launch Houdini")
-                    lines.append(
-                        "pushd '{}' && source houdini_setup && popd".format(
-                            os.environ["HFS"]
-                        )
-                    )
-                    # Command
                     lines.append('houdini -foreground "$@"')
                     launch_file.writelines(line + "\n" for line in lines)
                 elif product_name == "maya":
-                    # App
-                    lines.append("# Launch Maya")
-                    # Command
                     lines.append(
                         '"{}" "$@"'.format(
                             os.path.join(os.environ["MAYA_LOCATION"], "bin", "maya")
@@ -664,9 +662,8 @@ class UpdateManager(object):
             launch_file_path = os.path.join(directory_path, "launch.bat")
             with open(launch_file_path, "w") as launch_file:
                 lines = []
-                # Environment
-                lines.append("REM Setup environment")
-                # UpdateManager
+                # Source Resolver
+                lines.append("REM Setup Resolver")
                 lines.append(
                     "set {}={}".format(ENV_USD_ASSET_RESOLVER, directory_path)
                 )
@@ -679,7 +676,8 @@ class UpdateManager(object):
                             env_name=env_name, env_value=env_value, sep=os.pathsep
                         )
                     )
-                # App & command
+                # Launch App
+                lines.append("REM Launch {app}".format(app=product_name.title()))
                 if product_name == "houdini":
                     lines.append("REM Launch Houdini")
                     lines.append(
