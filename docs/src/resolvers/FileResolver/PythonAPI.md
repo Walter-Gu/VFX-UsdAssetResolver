@@ -15,10 +15,11 @@ Tokens can be found in FileResolver.Tokens:
 ```python
 FileResolver.Tokens.mappingPairs
 ```
-## Resolver [解析器]
-We also have the opt-in feature to expose any identifier, regardless of absolute/relative/search path based formatting to be run through our mapped pairs mapping by setting the `AR_CACHEDRESOLVER_ENV_EXPOSE_ABSOLUTE_PATH_IDENTIFIERS` environment variable to `1` or by calling `pxr.Ar.GetUnderlyingResolver().SetExposeAbsolutePathIdentifierState(True)`. This then forwards any path to be run through our mapped pairs mapping, regardless of how the identifier is formatted. 
+## Resolver
+We also have the opt-in feature to expose any identifier, regardless of absolute/relative/search path based formatting to be run through our mapped pairs mapping by setting the `AR_EXPOSE_ABSOLUTE_PATH_IDENTIFIERS` environment variable to `1` or by calling `pxr.Ar.GetUnderlyingResolver().SetExposeAbsolutePathIdentifierState(True)`. This then forwards any path to be run through our mapped pairs mapping, regardless of how the identifier is formatted.
 
-[ 我们还有一个可选功能，通过将 AR_CACHEDRESOLVER_ENV_EXPOSE_ABSOLUTE_PATH_IDENTIFIERS 环境变量设置为 1，或者调用 pxr.Ar.GetUnderlyingResolver().SetExposeAbsolutePathIdentifierState(True)，可以将任何标识符（无论它是基于绝对路径、相对路径还是搜索路径的格式）暴露给我们的映射机制进行处理. 这样，无论标识符的格式如何，都会将其通过我们的映射对进行映射处理]
+[ 我们还可以选择通过设置 AR_FILERESOLVER_ENV_EXPOSE_ABSOLUTE_PATH_IDENTIFIERS 环境变量为 1 或通过调用 pxr.Ar.GetUnderlyingResolver().SetExposeAbsolutePathIdentifierState(True) 来公开任何标识符，无论基于绝对/相对/搜索路径的格式如何]
+
 ```python
 from pxr import Ar, Usd
 from usdAssetResolver import FileResolver

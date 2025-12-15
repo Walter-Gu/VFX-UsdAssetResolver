@@ -6,10 +6,11 @@ This resolver is a file system based resolver similar to the default resolver wi
 {{#include ../shared_features.md:resolverSharedFeatures}}
 - You can adjust the resolver context content during runtime via exposed Python methods (More info [here](./PythonAPI.md)). Refreshing the stage is also supported, although it might be required to trigger additional reloads in certain DCCs.
 
-    [ 您可以在运行时通过公开的 Python 方法调整解析器上下文内容（更多信息请参见[此处](./PythonAPI.md)）.还支持刷新 stage，尽管可能需要在某些 DCC 中触发额外的重新加载]
-- We optionally also support exposing alle path identifiers to our `ResolverContext.ResolveAndCache` Python method. This can be enabled by setting the `AR_CACHEDRESOLVER_ENV_EXPOSE_ABSOLUTE_PATH_IDENTIFIERS` environment variable to `1` or by calling `pxr.Ar.GetUnderlyingResolver().SetExposeAbsolutePathIdentifierState(True)`. This then forwards any path to be run through our mapped pairs mapping, regardless of how the identifier is formatted.
+[ 您可以通过暴露的 Python 方法在运行时调整解析器上下文内容（更多信息[这里](./PythonAPI.md)）。刷新阶段也得到支持，尽管可能需要触发某些 DCC 中的其他重新加载。]
 
-    [ 我们还可以选择支持向 ResolverContext.ResolveAndCache Python 方法公开所有路径标识符. 可以通过将 AR_CACHEDRESOLVER_ENV_EXPOSE_ABSOLUTE_PATH_IDENTIFIERS 环境变量设置为 1 或调用 pxr.Ar.GetUnderlyingResolver().SetExposeAbsolutePathIdentifierState(True) 来启用此功能. 这样，无论标识符的格式如何，都会将所有路径通过我们的映射键值对进行映射处理]
+- We optionally also support exposing alle path identifiers to our `ResolverContext.ResolveAndCache` Python method. This can be enabled by setting the `AR_EXPOSE_ABSOLUTE_PATH_IDENTIFIERS` environment variable to `1` or by calling `pxr.Ar.GetUnderlyingResolver().SetExposeAbsolutePathIdentifierState(True)`. This then forwards any path to be run through our mapped pairs mapping, regardless of how the identifier is formatted.
+
+[ 我们还可以选择通过设置 AR_FILERESOLVER_ENV_EXPOSE_ABSOLUTE_PATH_IDENTIFIERS 环境变量为 1 或通过调用 pxr.Ar.GetUnderlyingResolver().SetExposeAbsolutePathIdentifierState(True) 来公开任何标识符，无论基于绝对/相对/搜索路径的格式如何]
 
 ```admonish tip title="Pro Tip"
 Optionally you can opt-in into also exposing absolute identifiers (so all (absolute/relative/identifiers that don't start with "/","./","../") identifiers) to our mapping pair mechanism by setting the `AR_FILERESOLVER_ENV_EXPOSE_ABSOLUTE_PATH_IDENTIFIERS` environment variable to `1` or by calling `pxr.Ar.GetUnderlyingResolver().SetExposeAbsolutePathIdentifierState(True)`. This enforces all identifiers to run through our mapped pairs mapping. The mapped result can also be a search path based path, which then uses the search paths to resolve itself. (So mapping from an absolute to search path based path via the mapping pairs is possible.)

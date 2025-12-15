@@ -1,7 +1,10 @@
 | <img src="https://raw.githubusercontent.com/LucaScheller/VFX-UsdAssetResolver/main/tools/UsdAssetResolver_Logo.svg" width="128"> |  <h1> OpenUSD Asset Resolver </h1> |
 |--|--|
 
-[![Deploy Documentation to GitHub Pages](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/mdbook.yml/badge.svg)](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/mdbook.yml) [![Build USD Asset Resolvers against Houdini](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/build_houdini.yml/badge.svg)](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/build_houdini.yml)
+[![Deploy Documentation to GitHub Pages](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/mdbook.yml/badge.svg)](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/mdbook.yml)
+[![Build USD Asset Resolvers against USD](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/build_standalone.yml/badge.svg)](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/build_standalone.yml)
+[![Build USD Asset Resolvers against Houdini](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/build_houdini.yml/badge.svg)](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/build_houdini.yml)
+[![Build USD Asset Resolvers against Maya](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/build_maya.yml/badge.svg)](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/build_maya.yml)
 
 This repository holds reference implementations for [Usd](https://openusd.org/release/index.html) [asset resolvers](https://openusd.org/release/glossary.html#usdglossary-assetresolution). The resolvers are compatible with the AR 2.0 standard proposed in the [Asset Resolver 2.0 Specification](https://openusd.org/release/wp_ar2.html). As the Usd documentation offers quite a good overview over the overall asset resolution system, we will not be covering it in this repository's documentation.
 
@@ -13,8 +16,9 @@ To build the various resolvers, follow the instructions in the [install guide](h
 [ 要构建各种解析器，请按照 [安装指南](https://lucascheller.github.io/VFX-UsdAssetResolver/installation/requirements.html) 中的说明进行操作]
 
 > [!NOTE]
-> This guide currently covers compiling against Houdini/Maya on Linux and Windows. Alternatively you can also download a pre-compiled builds on our [release page](https://github.com/LucaScheller/VFX-UsdAssetResolver/releases). To load the resolver, you must specify a few environment variables, see our [environment variables](https://lucascheller.github.io/VFX-UsdAssetResolver/resolvers/overview.html#environment-variables) section for more details.\
- [ 本指南当前涵盖在 Linux 和 Windows 上针对 Houdini/Maya 进行编译或者您也可以在我们的 [发布页面](https://github.com/LucaScheller/VFX-UsdAssetResolver/releases) 下载预编译的版本. 要加载解析器您必须指定一些环境变量，请参阅我们的 [环境变量](https://lucascheller.github.io/VFX-UsdAssetResolver/resolvers/overview.html#environment-variables) 部分以了解更多详细信息]
+> This guide currently covers compiling against standalone/Houdini/Maya/Nuke on Linux and Windows. Alternatively you can also download a pre-compiled builds on our [release page](https://github.com/LucaScheller/VFX-UsdAssetResolver/releases) (except for Nuke). To load the resolver, you must specify a few environment variables, see our [environment variables](https://lucascheller.github.io/VFX-UsdAssetResolver/resolvers/overview.html#environment-variables) section for more details.
+
+[本指南目前涵盖了在Linux和Windows上针对独立/Houdini/Maya/Nuke进行编译。或者，您也可以在我们的[发布页面]上下载预编译的版本(https://github.com/LucaScheller/VFX-UsdAssetResolver/releases)（Nuke除外）。要加载解析器，您必须指定一些环境变量，请参阅我们的[环境变量](https://lucascheller.github.io/VFX-UsdAssetResolver/resolvers/overview.html#environment-变量）部分了解更多详细信息。]
 
 > [!IMPORTANT]
 > We also offer a quick install method for Houdini/Maya that does the download of the compiled resolvers and environment variable setup for you. This is ideal if you want to get your hands dirty right away and you don't have any C++ knowledge or extensive USD developer knowledge. If you are a small studio, you can jump right in and play around with our resolvers and prototype them further to make it fit your production needs.\
@@ -66,7 +70,7 @@ You can check them out in our [tutorials section](https://lucascheller.github.io
 
 ## Contributing and Acknowledgements [贡献和致谢]
 Special thanks to [Jonas Sorgenfrei](https://github.com/jonassorgenfrei) for helping bring this project to life as well as all the contributors on the Usd-Interest forum, particularly
-Mark Tucker, ColinE, Jake Richards, Pawel Olas, Joshua Miller US, Simon Boorer. 
+Mark Tucker, ColinE, Jake Richards, Pawel Olas, Joshua Miller US, Simon Boorer, @dovanbel and @marcantoinep. 
 
 [ 特别感谢 [Jonas Sorgenfrei](https://github.com/jonassorgenfrei) 帮助实现该项目，以及 USD-Interest 论坛上的所有贡献者，特别是 Mark Tucker, ColinE, Jake Richards, Pawel Olas, Joshua Miller US, Simon Boorer]
 
@@ -78,7 +82,7 @@ Post of relevance in the Usd-Interest Forum to this repo:
 - [AR 2.0: CreateDefaultContextForAsset replacement?
 ](https://groups.google.com/g/usd-interest/c/7Aqv3k-V_DU/m/HPz7dSZLBQAJ)
 
-Please consider contributing back to the Usd project in the  official [Usd Repository](https://github.com/PixarAnimationStudios/USD) and via the [Usd User groups](https://wiki.aswf.io/display/WGUSD/USD+Working+Group).
+Please consider contributing back to the Usd project in the  official [USD Repository](https://github.com/PixarAnimationStudios/USD) and via the [USD User groups](https://wiki.aswf.io/display/WGUSD/USD+Working+Group).
 
 [ 请考虑通过官方 [Usd Repository](https://github.com/PixarAnimationStudios/USD) 和 [Usd User groups](https://wiki.aswf.io/display/WGUSD/USD+Working+Group) 向 Usd 项目贡献您的力量]
 

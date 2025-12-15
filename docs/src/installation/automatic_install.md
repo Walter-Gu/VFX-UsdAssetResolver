@@ -49,6 +49,11 @@ run_dcc()
 
 ![Houdini Python Source editor](./media/HoudiniPythonSourceEditor.jpg)
 
+We also recommend turning "Set Asset Resolver Context From LOP Node Parameters" off, if you want to drive the context via the /stage preferences.
+Leaving it on will require you to use a "Configure Stage" LOP  node.
+
+![Houdini Asset Resolver Context Preferences editor](./media/HoudiniAssetResolverContextPreferences.jpg)
+
 ## Maya
 In Maya we simply need to open the "Script Editor" and run the following code to get access to the update manager. You should preferably do this in a clean Maya session as a safety measure.
 

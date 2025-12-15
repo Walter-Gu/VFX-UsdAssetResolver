@@ -10,7 +10,11 @@ import tempfile
 import zipfile
 from urllib import request
 
-from PySide2 import QtCore, QtGui, QtWidgets
+try:
+    from PySide6 import QtCore, QtGui, QtWidgets
+except ImportError:
+    from PySide2 import QtCore, QtGui, QtWidgets
+
 
 # To run, execute this in the Houdini/Maya
 """
@@ -337,7 +341,7 @@ class UpdateManager(object):
             product_name = "houdini"
             product_version = hou.applicationVersionString()
             product_python_version = "-py{}{}".format(
-                sys.version_info.major, str(sys.version_info.minor)[:1]
+                sys.version_info.major, sys.version_info.minor
             )
         elif dcc_name == "maya":
             import maya.cmds as cmds
@@ -598,7 +602,7 @@ class UpdateManager(object):
             "PXR_PLUGINPATH_NAME": os.path.join(resolver_dir_path, "resources"),
             "PYTHONPATH": os.path.join(resolver_dir_path, "lib", "python"),
         }
-        if resolver_name in ["PythonResolver", "CachedResolver"]:
+        if resolver_name in ["PythonResolver", "FileResolver"]:
             env.update(
                 {
                     "AR_ENV_SEARCH_PATHS": "{}{}{}".format(
@@ -617,9 +621,16 @@ class UpdateManager(object):
             with open(launch_file_path, "w") as launch_file:
                 lines = []
                 lines.append("#!/bin/bash")
-                # Environment
-                lines.append("# Setup environment")
-                # UpdateManager
+                # Source App
+                if product_name == "houdini":
+                    lines.append("# Setup Houdini")
+                    lines.append(
+                        "pushd '{}' && source houdini_setup && popd".format(
+                            os.environ["HFS"]
+                        )
+                    )
+                # Source Resolver
+                lines.append("# Setup Resolver")
                 lines.append(
                     "export {}={}".format(ENV_USD_ASSET_RESOLVER, directory_path)
                 )
@@ -632,21 +643,12 @@ class UpdateManager(object):
                             env_name=env_name, env_value=env_value, sep=os.pathsep
                         )
                     )
+                # Launch App
+                lines.append("# Launch {app}".format(app=product_name.title()))
                 if product_name == "houdini":
-                    # App
-                    lines.append("# Launch Houdini")
-                    lines.append(
-                        "pushd '{}' && source houdini_setup && popd".format(
-                            os.environ["HFS"]
-                        )
-                    )
-                    # Command
                     lines.append('houdini -foreground "$@"')
                     launch_file.writelines(line + "\n" for line in lines)
                 elif product_name == "maya":
-                    # App
-                    lines.append("# Launch Maya")
-                    # Command
                     lines.append(
                         '"{}" "$@"'.format(
                             os.path.join(os.environ["MAYA_LOCATION"], "bin", "maya")
@@ -660,9 +662,8 @@ class UpdateManager(object):
             launch_file_path = os.path.join(directory_path, "launch.bat")
             with open(launch_file_path, "w") as launch_file:
                 lines = []
-                # Environment
-                lines.append("REM Setup environment")
-                # UpdateManager
+                # Source Resolver
+                lines.append("REM Setup Resolver")
                 lines.append(
                     "set {}={}".format(ENV_USD_ASSET_RESOLVER, directory_path)
                 )
@@ -675,7 +676,8 @@ class UpdateManager(object):
                             env_name=env_name, env_value=env_value, sep=os.pathsep
                         )
                     )
-                # App & command
+                # Launch App
+                lines.append("REM Launch {app}".format(app=product_name.title()))
                 if product_name == "houdini":
                     lines.append("REM Launch Houdini")
                     lines.append(

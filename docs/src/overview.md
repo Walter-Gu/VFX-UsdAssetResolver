@@ -2,7 +2,9 @@
 |--|--|
 
 [![Deploy Documentation to GitHub Pages](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/mdbook.yml/badge.svg)](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/mdbook.yml)
+[![Build USD Asset Resolvers against USD](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/build_standalone.yml/badge.svg)](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/build_standalone.yml)
 [![Build USD Asset Resolvers against Houdini](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/build_houdini.yml/badge.svg)](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/build_houdini.yml)
+[![Build USD Asset Resolvers against Maya](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/build_maya.yml/badge.svg)](https://github.com/LucaScheller/VFX-UsdAssetResolver/actions/workflows/build_maya.yml)
 
 This repository holds reference implementations for [Usd](https://openusd.org/release/index.html) [asset resolvers](https://openusd.org/release/glossary.html#usdglossary-assetresolution). The resolvers are compatible with the AR 2.0 standard proposed in the [Asset Resolver 2.0 Specification](https://openusd.org/release/wp_ar2.html). As the Usd documentation offers quite a good overview over the overall asset resolution system, we will not be covering it in this repository's documentation. You can find a video tutorial [here](./tutorials.md) (or on [Youtube](https://www.youtube.com/watch?v=y4FjYprM4oA&list=PLiu1hwgXfcszQXU1WU0Ucsc2o9Fz8zLsL)/[Vimeo](https://vimeo.com/showcase/10771710)).
 
@@ -14,9 +16,9 @@ To build the various resolvers, follow the instructions in the [install guide](.
 [ 要构建各种解析器，请按照 [安装指南](./installation/overview.md) 中的说明进行操作]
 
 ```admonish info
-This guide currently covers compiling against Houdini/Maya on Linux and Windows. Alternatively you can also download a pre-compiled builds on our [release page](https://github.com/LucaScheller/VFX-UsdAssetResolver/releases). To load the resolver, you must specify a few environment variables, see our [environment variables](./resolvers/overview.md#environment-variables) section for more details.
+This guide currently covers compiling against standalone/Houdini/Maya/Nuke on Linux and Windows. Alternatively you can also download pre-compiled builds on our [release page](https://github.com/LucaScheller/VFX-UsdAssetResolver/releases) (except for Nuke). To load the resolver, you must specify a few environment variables, see our [environment variables](./resolvers/overview.md#environment-variables) section for more details.
 
-[ 本指南目前涵盖了在 Linux 和 Windows 上使用 Houdini/Maya 进行编译的内容. 另外，您也可以在我们的 [发布页面](https://github.com/LucaScheller/VFX-UsdAssetResolver/releases) 上下载预编译的构建版本. 要加载解析器，您需要指定一些环境变量，请查看我们的 [环境变量](./resolvers/overview.md#environment-variables) 部分以获取更多详细信息]
+[本指南目前涵盖了在Linux和Windows上针对独立/Houdini/Maya/Nuke进行编译。或者，您也可以在我们的[发布页面]上下载预编译的版本(https://github.com/LucaScheller/VFX-UsdAssetResolver/releases)（Nuke除外）。要加载解析器，您必须指定一些环境变量，有关更多详细信息，请参阅我们的[环境变量]（./resolvers/overview.md#环境变量）部分]
 ```
 
 ```admonish tip

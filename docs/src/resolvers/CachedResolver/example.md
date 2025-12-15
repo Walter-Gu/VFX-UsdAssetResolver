@@ -4,9 +4,9 @@ In this example we examine how a possible production setup would look like.
 
 [ 在此示例中，我们研究了可能的生产设置是什么样子的]
 
-We enable the advanced feature of exposing relative identifiers to Python by setting the `AR_CACHEDRESOLVER_ENV_EXPOSE_RELATIVE_PATH_IDENTIFIERS` environment variable to `1`.
+We enable the advanced feature of exposing relative identifiers to Python by setting the `AR_EXPOSE_RELATIVE_PATH_IDENTIFIERS` environment variable to `1`.
 
-[ 我们通过将 AR_CACHEDRESOLVER_ENV_EXPOSE_RELATIVE_PATH_IDENTIFIERS 环境变量设置为 1 来启用向 Python 公开相对标识符的高级功能]
+[ 我们通过将 AR_EXPOSE_RELATIVE_PATH_IDENTIFIERS 环境变量设置为 1 来启用向 Python 公开相对标识符的高级功能]
 
 ## Prerequisites [先决条件]
 
@@ -24,12 +24,12 @@ If you are using the pre-compiled builds, make sure that you adjust the paths ac
 export PYTHONPATH=${REPO_ROOT}/files/implementations/CachedResolver/code:${REPO_ROOT}/dist/${RESOLVER_NAME}/lib/python:${PYTHONPATH}
 export PXR_PLUGINPATH_NAME=${REPO_ROOT}/dist/${RESOLVER_NAME}/resources:${PXR_PLUGINPATH_NAME}
 export LD_LIBRARY_PATH=${REPO_ROOT}/dist/${RESOLVER_NAME}/lib
-export AR_CACHEDRESOLVER_ENV_EXPOSE_RELATIVE_PATH_IDENTIFIERS=1
+export AR_EXPOSE_RELATIVE_PATH_IDENTIFIERS=1
 # Windows
 set PYTHONPATH=%REPO_ROOT%\files\implementations\CachedResolver\code;%REPO_ROOT%\dist\%RESOLVER_NAME%\lib\python;%PYTHONPATH%
 set PXR_PLUGINPATH_NAME=%REPO_ROOT%\dist\%RESOLVER_NAME%\resources;%PXR_PLUGINPATH_NAME%
 set PATH=%REPO_ROOT%\dist\%RESOLVER_NAME%\lib;%PATH%
-set AR_CACHEDRESOLVER_ENV_EXPOSE_RELATIVE_PATH_IDENTIFIERS=1
+set AR_EXPOSE_RELATIVE_PATH_IDENTIFIERS=1
 ```
 ~~~
 
@@ -54,8 +54,9 @@ Let's have a look how we can demo this setup in Houdini.
 
 [ 让我们看看如何在 Houdini 中演示此设置]
 
-### Loading our Shot [加载我们的镜头]
-If everything was initialized correctly, we can sublayer in the shot A USD file by referring to it via `shots/shotsA`.
+
+### Loading our Shot
+If everything was initialized correctly, we can sublayer in the shot A USD file by referring to it via `shots/shotA`
 
 [ 如果一切都正确初始化，我们可以通过 shots/shotsA 引用 shot A USD 文件来对其进行子分层]
 
@@ -177,7 +178,7 @@ class Resolver:
         # For this example, we assume all identifier are anchored to the shot and asset directories.
         # We remove the version from the identifier, so that our mapping files can target a version-less identifier.
         anchor_path = anchorAssetPath.GetPathString()
-        anchor_path = anchor_path[:-1] if anchor_path[-1] == "/" else anchor_path[:anchor_path.rfind("/")]
+        anchor_path = anchor_path[:-1] if anchor_path[-1] == os.path.sep else anchor_path[:anchor_path.rfind(os.path.sep)]
         entity_type = os.path.basename(os.path.dirname(anchor_path))
         entity_identifier = os.path.basename(anchor_path)
         entity_element = os.path.basename(assetPath).split("_")[0]
@@ -231,10 +232,10 @@ class ResolverContext:
             re-applies the correct mapping. If the identifier is encountered again it will use the C++ cache, which means everything is kept fast.
             """
             #######
-            base_identifier = assetPath.removeprefix(RELATIVE_PATH_IDENTIFIER_PREFIX)
+            base_identifier = assetPath[len(RELATIVE_PATH_IDENTIFIER_PREFIX):]
             anchor_path, entity_element = base_identifier.split("?")
             entity_type, entity_identifier = anchor_path.split("/")
-            entity_element, entity_version = entity_element.split("-")
+            entity_element, entity_version = entity_element.split("_")
             # Here you would add your custom relative path resolve logic.
             # We can test our mapping pairs to see if the version is pinned, otherwise we fallback to the original intent.
             versionless_identifier = f"{RELATIVE_PATH_IDENTIFIER_PREFIX}{entity_type}/{entity_identifier}?{entity_element}"

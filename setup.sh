@@ -9,9 +9,12 @@ then
     export AR_RESOLVER_NAME_UPPERCASE=$(echo ${AR_RESOLVER_NAME} | tr '[:lower:]' '[:upper:]')
     # DCC
     export AR_DCC_NAME=HOUDINI
+    if [ "$AR_DCC_NAME" == "STANDALONE" ]; then
+        export USD_STANDALONE_ROOT="/path/to/usd/standalone/root"
+    fi
     if [ "$AR_DCC_NAME" == "HOUDINI" ]; then
         # Source Houdini (This defines what Houdini version to compile against)
-        pushd /opt/hfs20.0 > /dev/null
+        pushd /opt/hfs21.0 > /dev/null
         source houdini_setup
         popd > /dev/null
     fi
@@ -19,6 +22,11 @@ then
         export MAYA_USD_SDK_ROOT="/path/to/maya/usd/sdk/root/.../mayausd/USD"
         export MAYA_USD_SDK_DEVKIT_ROOT="/path/to/maya/usd/sdk/root/.../content/of/devkit.zip"
         export PYTHON_ROOT="/path/to/python/root"
+    fi
+    if [ "$AR_DCC_NAME" == "NUKE" ]; then
+        export NUKE_ROOT="/path/to/nuke/root"
+        export TBB_ROOT="/path/to/tbb/root"
+        export BOOST_ROOT="/path/to/boost/root"
     fi
     # Source env
     export PYTHONPATH=${REPO_ROOT}/dist/${AR_RESOLVER_NAME}/lib/python:${PYTHONPATH}

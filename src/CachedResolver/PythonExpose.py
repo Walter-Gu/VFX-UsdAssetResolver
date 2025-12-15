@@ -3,7 +3,7 @@ import logging
 import os
 from functools import wraps
 
-from pxr import Ar
+from pxr import Ar, Sdf
 
 
 # Init logger
@@ -112,23 +112,31 @@ class ResolverContext:
         LOG.debug(
             "::: ResolverContext.ResolveAndCache | {} | {}".format(assetPath, context.GetCachingPairs())
         )
+        """Implement custom resolve logic and add the resolved path to the cache.
         resolved_asset_path = "/some/path/to/a/file.usd"
         context.AddCachingPair(assetPath, resolved_asset_path)
-        """
-        To clear the context cache call:
+        # To clear the context cache call:
         context.ClearCachingPairs()
         """
+        if Sdf.Layer.IsAnonymousLayerIdentifier(assetPath):
+            context.AddCachingPair(assetPath, assetPath)
+            return assetPath
         """The code below is only needed to verify that UnitTests work."""
         UnitTestHelper.resolve_and_cache_call_counter += 1
+        resolved_asset_path = "/some/path/to/a/file.usd"
+        context.AddCachingPair(assetPath, resolved_asset_path)
         if assetPath == "unittest.usd":
             current_dir_path = UnitTestHelper.current_directory_path
             asset_a_file_path = os.path.join(current_dir_path, "assetA.usd")
             asset_b_file_path = os.path.join(current_dir_path, "assetB.usd")
             context.AddCachingPair("assetA.usd", asset_a_file_path)
             context.AddCachingPair("assetB.usd", asset_b_file_path)
-        if assetPath.startswith("relativePath|"):
-            relative_path, anchor_path = assetPath.removeprefix("relativePath|").split("?")
-            anchor_path = anchor_path[:-1] if anchor_path[-1] == "/" else anchor_path[:anchor_path.rfind("/")]
+        relative_path_prefix = "relativePath|"
+        if assetPath.startswith(relative_path_prefix):
+            relative_path, anchor_path = assetPath[len(relative_path_prefix) :].split(
+                "?"
+            )
+            anchor_path = anchor_path[:-1] if anchor_path[-1] == os.path.sep else anchor_path[:anchor_path.rfind(os.path.sep)]
             resolved_asset_path = os.path.normpath(os.path.join(anchor_path, relative_path))
             context.AddCachingPair(assetPath, resolved_asset_path)
         return resolved_asset_path

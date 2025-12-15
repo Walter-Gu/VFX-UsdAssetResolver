@@ -1,7 +1,7 @@
 #ifndef AR_PYTHONRESOLVER_DEBUGCODES_H
 #define AR_PYTHONRESOLVER_DEBUGCODES_H
 
-#include <pxr/pxr.h>
+#include "pxr/pxr.h"
 #include "pxr/base/tf/debug.h"
 
 PXR_NAMESPACE_OPEN_SCOPE

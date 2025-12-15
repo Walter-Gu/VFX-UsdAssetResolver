@@ -32,8 +32,6 @@ See the _CreateIdentifier method for more information.
 */
 static std::mutex g_resolver_create_identifier_mutex;
 
-namespace python = AR_BOOST_NAMESPACE::python;
-
 PXR_NAMESPACE_OPEN_SCOPE
 
 AR_DEFINE_RESOLVER(CachedResolver, ArResolver);
@@ -61,7 +59,7 @@ _AnchorRelativePath(
     const std::string& path)
 {
     if (TfIsRelativePath(anchorPath) ||
-        !_IsRelativePath(path)) {
+        !_IsFileRelativePath(path)) {
         return path;
     }
     // Ensure we are using forward slashes and not back slashes.
@@ -72,18 +70,6 @@ _AnchorRelativePath(
     // directory.
     const std::string anchoredPath = TfStringCatPaths(TfStringGetBeforeSuffix(forwardPath, '/'), path);
     return TfNormPath(anchoredPath);
-}
-
-static ArResolvedPath
-_ResolveAnchored(
-    const std::string& anchorPath,
-    const std::string& path)
-{
-    std::string resolvedPath = path;
-    if (!anchorPath.empty()) {
-        resolvedPath = TfStringCatPaths(anchorPath, path);
-    }
-    return TfPathExists(resolvedPath) ? ArResolvedPath(TfAbsPath(resolvedPath)) : ArResolvedPath();
 }
 
 CachedResolver::CachedResolver() {
@@ -161,9 +147,16 @@ CachedResolver::_CreateIdentifier(
                     and the Python Resolver.CreateRelativePathIdentified method on how to use this. 
                     */
                     const std::lock_guard<std::mutex> lock(g_resolver_create_identifier_mutex);
-                    int state = TfPyInvokeAndExtract(DEFINE_STRING(AR_CACHEDRESOLVER_USD_PYTHON_EXPOSE_MODULE_NAME),
-                                                     "Resolver.CreateRelativePathIdentifier",
-                                                     &pythonResult, AR_BOOST_NAMESPACE::ref(*this), anchoredAssetPath, assetPath, anchorAssetPath);
+
+                    int state = TfPyInvokeAndExtract(
+                        DEFINE_STRING(AR_CACHEDRESOLVER_USD_PYTHON_EXPOSE_MODULE_NAME),
+                        "Resolver.CreateRelativePathIdentifier",
+                        #if AR_BOOST_PXR_EXTERNAL_EXISTS == 1
+                            &pythonResult, AR_BOOST_NAMESPACE::python::ref(*this), anchoredAssetPath, assetPath, anchorAssetPath
+                        #else
+                            &pythonResult, AR_BOOST_NAMESPACE::ref(*this), anchoredAssetPath, assetPath, anchorAssetPath
+                        #endif
+                    );
                     if (!state) {
                         std::cerr << "Failed to call Resolver.CreateRelativePathIdentifier in " << DEFINE_STRING(AR_CACHEDRESOLVER_USD_PYTHON_EXPOSE_MODULE_NAME) << ".py. ";
                         std::cerr << "Please verify that the python code is valid!" << std::endl;
@@ -173,13 +166,6 @@ CachedResolver::_CreateIdentifier(
                 return pythonResult;
             }
         }
-    }
-    // Anchor non file path based identifiers and see if a file exists.
-    // This is mostly for debugging as it allows us to add a file relative to our
-    // anchor directory that has a higher priority than our (usually unanchored) 
-    // resolved asset path.
-    if (_IsNotFilePath(assetPath) && Resolve(anchoredAssetPath).empty()) {
-        return TfNormPath(assetPath);
     }
     return TfNormPath(anchoredAssetPath);
 }
@@ -213,9 +199,6 @@ CachedResolver::_Resolve(
     if (assetPath.empty()) {
         return ArResolvedPath();
     }
-    if (SdfLayer::IsAnonymousLayerIdentifier(assetPath)){
-        return ArResolvedPath(assetPath);
-    }
 
     if (this->_IsContextDependentPath(assetPath)) {
         const CachedResolverContext* contexts[2] = {this->_GetCurrentContextPtr(), &_fallbackContext};
@@ -225,7 +208,7 @@ CachedResolver::_Resolve(
                 auto &mappingPairs = ctx->GetMappingPairs();
                 auto map_find = mappingPairs.find(assetPath);
                 if(map_find != mappingPairs.end()){
-                    ArResolvedPath resolvedPath = _ResolveAnchored(this->emptyString, map_find->second);
+                    ArResolvedPath resolvedPath = ArResolvedPath(TfAbsPath(map_find->second));
                     return resolvedPath;
                     // Assume that a map hit is always valid.
                     // if (resolvedPath) {
@@ -236,7 +219,7 @@ CachedResolver::_Resolve(
                 auto &cachedPairs = ctx->GetCachingPairs();
                 auto cache_find = cachedPairs.find(assetPath);
                 if(cache_find != cachedPairs.end()){
-                    ArResolvedPath resolvedPath = _ResolveAnchored(this->emptyString, cache_find->second);
+                    ArResolvedPath resolvedPath = ArResolvedPath(TfAbsPath(cache_find->second));
                     return resolvedPath;
                     // Assume that a cache hit is always valid.
                     // if (resolvedPath) {
@@ -250,7 +233,7 @@ CachedResolver::_Resolve(
                 allow for resolver multithreading with different contexts.
                 See .ResolveAndCachePair for more information.
                 */
-                ArResolvedPath resolvedPath = _ResolveAnchored(this->emptyString, ctx->ResolveAndCachePair(assetPath));
+                ArResolvedPath resolvedPath = ArResolvedPath(TfAbsPath(ctx->ResolveAndCachePair(assetPath)));
                 if (resolvedPath) {
                     return resolvedPath;
                 }
@@ -261,7 +244,7 @@ CachedResolver::_Resolve(
         return ArResolvedPath();
     }
 
-    return _ResolveAnchored(std::string(), assetPath);
+    return TfPathExists(assetPath) ? ArResolvedPath(TfAbsPath(assetPath)) : ArResolvedPath();
 }
 
 ArResolvedPath

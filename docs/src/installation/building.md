@@ -1,15 +1,15 @@
-# Building [构建]
-Currently we support building against Houdini and Maya on Linux and Windows. If you don't want to self-compile, you can also download pre-compiled builds on our [release page](https://github.com/LucaScheller/VFX-UsdAssetResolver/releases). To load the resolver, you must specify a few environment variables, see our [Resolvers > Environment Variables](../resolvers/overview.md#environment-variables) section for more details.
+# Building
+Currently we support building against standalone, Houdini, Maya, Nuke on Linux and Windows. If you don't want to self-compile, you can also download pre-compiled builds on our [release page](https://github.com/LucaScheller/VFX-UsdAssetResolver/releases). To load the resolver, you must specify a few environment variables, see our [Resolvers > Environment Variables](../resolvers/overview.md#environment-variables) section for more details. 
 
 [ 目前，我们支持在 Linux 和 Windows 上针对 Houdini 和 Maya 进行构建. 如果您不想自编译，也可以在我们的 [发布页面](https://github.com/LucaScheller/VFX-UsdAssetResolver/releases) 下载预编译版本. 要加载解析器，您必须指定一些环境变量，请参阅我 [Resolvers > Environment Variables](../resolvers/overview.md#environment-variables) 了解更多详细信息]
 
 ## Setting up our build environment [设置我们的构建环境]
 After installing the [requirements](./requirements.md), we first need to set a couple of environment variables that our cmake file depends on.
 
-[ 安装 [需求依赖](./requirements.md) 后，我们首先需要设置 cmake 文件所依赖的几个环境变量]
+[安装[requirements]（./requires.md）后，我们首先需要设置cmake文件所依赖的几个环境变量。]
 
-### Using our convenience setup script [使用我们的便捷设置脚本]
-On Linux we provide a bash script that you can source that sets up our development environment. This sets a few environment variables needed to build the resolver as well as for Houdini/Maya to load it.
+### Using our convenience setup script
+On Linux we provide a bash script that you can source that sets up our development environment. This sets a few environment variables needed to build the resolver as well as for your USD capable application to load it.
 This can be done by running the following from the source directory:
 
 [ 在Linux上，我们提供了一个bash脚本，您可以运行它来设置我们的开发环境. 这将设置构建解析器以及让 Houdini/Maya 加载它所需的一些环境变量.这可以通过在源代码目录中运行以下命令来完成]
@@ -19,7 +19,7 @@ source setup.sh
 ```
 ~~~
 
-In the [setup.sh](https://github.com/LucaScheller/VFX-UsdAssetResolver/blob/main/setup.sh) file you can define what resolver to compile by setting the `RESOLVER_NAME` variable to one of the resolvers listed in [resolvers](../resolvers/overview.md) in camelCase syntax (for example `fileResolver` or `pythonResolver`). Here you'll also have to define what Houdini/Maya version to compile against.
+In the [setup.sh](https://github.com/LucaScheller/VFX-UsdAssetResolver/blob/main/setup.sh) file you can define what resolver to compile by setting the `AR_RESOLVER_NAME` variable to one of the resolvers listed in [resolvers](../resolvers/overview.md) in camelCase syntax (for example `fileResolver` or `pythonResolver`). Here you'll also have to define what application version to compile against.
 
 [ 在 [setup.sh](https://github.com/LucaScheller/VFX-UsdAssetResolver/blob/main/setup.sh) 文件中，您可以通过将 RESOLVER_NAME 变量设置为 [resolvers](../resolvers/overview.md) 中列出的解析器之一（使用驼峰命名法，例如 fileResolver 或 pythonResolver ）来定义要编译的解析器. 在此文件中，您还需要定义要针对哪个 Houdini/Maya 版本进行编译]
 
@@ -39,35 +39,81 @@ If you don't want to use our convenience script, you can also setup the environm
 ~~~admonish info title=""
 ```bash
 # Linux
+## Standalone
+export AR_DCC_NAME=standalone
+export USD_STANDALONE_ROOT="/path/to/usd/standalone/root"
 ## Houdini
 export AR_DCC_NAME=houdini
-export HFS=<PathToHoudiniRoot> # For example "/opt/hfs<HoudiniVersion>"
+export HFS="/path/to/houdini/root" # For example "/opt/hfs<HoudiniVersion>"
 ## Maya
 export AR_DCC_NAME=maya
 export MAYA_USD_SDK_ROOT="/path/to/maya/usd/sdk/root/.../mayausd/USD"
 export MAYA_USD_SDK_DEVKIT_ROOT="/path/to/maya/usd/sdk/root/.../content/of/devkit.zip"
 export PYTHON_ROOT="/path/to/python/root"
+## Nuke
+export AR_DCC_NAME=nuke
+export NUKE_ROOT="/path/to/nuke/root"
+export BOOST_ROOT="/path/to/boost/root" # The .../include/boost folder must be renamed to .../include/foundryboost
+export TBB_ROOT="/path/to/tbb/root"
+export PYTHON_ROOT="/path/to/python/root" # Windows only
 ## Resolver
 export AR_RESOLVER_NAME=fileResolver
 
 # Windows
+## Standalone
+set AR_DCC_NAME=standalone
+set USD_STANDALONE_ROOT="/path/to/usd/standalone/root"
 ## Houdini
 set AR_DCC_NAME=houdini
-set HFS=<PathToHoudiniRoot> # For example "C:\Program Files\Side Effects Software\<HoudiniVersion>"
+set HFS="/path/to/houdini/root" # For example "C:\Program Files\Side Effects Software\<HoudiniVersion>"
 ## Maya
 set AR_DCC_NAME=maya
 set MAYA_USD_SDK_ROOT="/path/to/maya/usd/sdk/root/.../mayausd/USD"
 set MAYA_USD_SDK_DEVKIT_ROOT="/path/to/maya/usd/sdk/root/.../content/of/devkit.zip"
 set PYTHON_ROOT="/path/to/python/root"
+## Nuke
+set AR_DCC_NAME=nuke
+set NUKE_ROOT="/path/to/nuke/root"
+set BOOST_ROOT="/path/to/boost/root" # The .../include/boost folder must be renamed to .../include/foundryboost
+set TBB_ROOT="/path/to/tbb/root"
+set PYTHON_ROOT="/path/to/python/root" # Windows only
 ## Resolver
 set AR_RESOLVER_NAME=fileResolver
 ```
 ~~~
 
-## Running the build [开始构建]
+## Running the build
+
 To run the build, run:
 
-[ 要运行构建，请运行]
+~~~admonish info title=""
+```bash
+# Linux
+./build.sh
+# Windows
+build.bat
+```
+~~~
+
+The `build.sh/.bat` files also contain (commented out) the environment definition part above, so alternatively just comment out the lines and you are good to go.
+
+[`build.sh/.bat` 文件还包含（注释掉）上面的环境定义部分，所以或者只注释掉这些行，就可以了]
+
+Depending on app/USD build you are compiling against, there might be additional requirements to be aware of as documented below.
+
+[根据您编译的应用程序/美元版本，可能还有其他要求需要注意，如下所述]
+
+### Standalone
+
+To build against a standalone/pre-built USD distribution, simply specify the root folder via the `AR_USD_STANDALONE_ROOT` environment variable.
+
+[要针对独立/预构建的USD发行版进行构建，只需通过“AR_USD_standalone_root”环境变量指定根文件夹]
+
+We recommend using [Nvidia's pre-compiled OpenUSD builds](https://developer.nvidia.com/usd) to avoid having to do a full custom USD build.
+
+[我们建议使用[Nvidia的预编译OpenUSD版本](https://developer.nvidia.com/usd)为了避免进行完全自定义的美元构建]
+
+### Houdini
 
 ~~~admonish warning title="Houdini GCC ABI Change"
 Starting with Houdini 20, SideFX is offering gcc 11 builds that don't use the old Lib C ABI. Our automatic GitHub builds make use of this starting Houdini 20 and upwards.
@@ -94,25 +140,77 @@ See the official [Release Notes](https://www.sidefx.com/docs/houdini/news/20/pla
 ```
 ~~~
 
-~~~admonish info title=""
-```bash
-# Linux
-./build.sh
-# Windows
-build.bat
-```
-~~~
+### Maya
 
-The `build.sh/.bat` files also contain (commented out) the environment definition part above, so alternatively just comment out the lines and you are good to go.
+Maya does not ship with python headers, we therefore need to self-compile python with the exact build version of the python build included with Maya distribution we intend to use.
 
-[ build.sh/.bat 文件也包含（被注释掉的）上述环境定义部分，因此，您还可以选择直接注释掉这些行，然后即可进行构建]
+[Maya不附带python头文件，因此我们需要使用我们打算使用的Maya发行版中包含的python构建的精确构建版本对python进行自编译]
 
-## Testing the build [测试构建]
-Unit tests are automatically run post-build on Linux using the Houdini/Maya version you are using. You can find each resolvers tests in its respective src/<ResolverName>/testenv folder.
+Our build scripts then links against `PYTHON_ROOT` env var specified python version. Alternatively the cmake file can be adjusted to only use the headers and link against the libs from Maya.
 
-[ 在Linux上，单元测试会在构建后自动运行，使用的是您正在使用的 Houdini/Maya 版本. 您可以在各自的src//\<resolver_name\>/testenv文件夹中找到每个解析器的测试]
+[然后，我们的构建脚本链接到`PYTHON_ROOT`环境变量指定的PYTHON版本。或者，可以调整cmake文件，使其仅使用Maya库的标头和链接]
 
-Alternatively you can run Houdini/Maya and check if the resolver executes correctly. If you didn't use our convenience script as noted above, you'll have to specify a few environment variables, so that our plugin is correctly detected by USD.
+On Windows, the standard python installer ships with headers, so we can leverage those instead and avoid compilation.
+
+[在Windows上，标准的python安装程序附带了头文件，因此我们可以利用这些头文件来避免编译]
+
+On Linux, we either compile it ourselves or use our system package manager to install our python developer packages. This may not be available for all package managers, which is why we recommend building python ourselves.
+
+[在Linux上，我们要么自己编译它，要么使用我们的系统包管理器安装我们的python开发人员包。这可能不适用于所有包管理器，这就是为什么我们建议自己构建python]
+
+### Nuke
+
+Nuke has the following additional requirements:
+
+[Nuke有以下额外要求：]
+
+- Python (Windows Only): Nuke itself does not ship with the necessary python headers on Windows, instead only with the libs. We either have to self compile or alternatively link to an existing compatible python header folder. Our build script expects the root folder to by specified by the `PYTHON_ROOT` env var.
+
+[在Windows上，Nuke本身不附带必要的python头文件，而只附带了库文件。我们要么自己编译，要么链接到一个现有的兼容python头文件文件夹。我们的构建脚本期望根文件夹由`PYTHON_ROOT`环境变量指定]
+
+- TBB: Nuke itself does not ship with the necessary TBB headers, instead only with the libs. We either have to self compile or alternatively link to an existing compatible TBB header folder. Our build script expects the root folder to by specified by the `TBB_ROOT` env var.
+
+[在Nuke中，本身不附带必要的TBB头文件，而只附带了库文件。我们要么自己编译，要么链接到一个现有的兼容TBB头文件文件夹。我们的构建脚本期望根文件夹由`TBB_ROOT`环境变量指定]
+
+- Boost: Nuke itself does not ship with the necessary boost headers, instead only with the libs. These are namespaced (file and symbol-wise) to `foundryboost`. To successfully compile, we'll have to self-compile boost and then copy/symlink the `<root>/include/boost` folder to `<root>/include/foundryboost`. Alternatively we can copy an existing compatible boost header folder to a new location and also copy/symlink it `<root>/include/foundryboost`. This way we have identical headers for both symbols. Our build script expects the root folder to by specified by the `BOOST_ROOT` env var.
+
+[Boost:Nuke本身不附带必要的Boost头文件，而只附带libs。这些是以“foundryboost”命名的（文件和符号）。为了成功编译，我们必须自编译boost，然后将“<root>/include/boost”文件夹复制到“<root>/include/fundryboost”。或者，我们可以将现有的兼容boost头文件夹复制到新位置，并将其复制/symlink为<root>/include/fundryboost`。这样，两个符号的标题就相同了。我们的构建脚本要求根文件夹由`BOOST_root`环境变量指定]
+
+
+Here is the boost situation explain in more detail:
+
+以下是对boost situation explain的更详细解释
+
+- Nuke does not ship with boost headers
+
+[Nuke本身不附带boost头文件]
+
+- Nuke namespaces boost symbols to foundryboost
+
+[在Nuke中，boost符号被命名空间为“foundryboost”]
+
+- Nuke doesn't namespace boost (headers/files) itself, instead it namespaces maps them (by means unknown to us).
+
+[在Nuke中，boost头文件没有被命名空间，而是通过未知的方式映射到“foundryboost”命名空间]
+
+This way it can include the standard USD headers (that use <boost/...>), but compile to foundryboost symbols.
+To solve this, we add a preprocessor definition to namespace boost to foundryboost and we duplicate/symlink
+the <boost root>/include/boost to <boost root>/include/foundryboost. This way it can apply the namespace mapping
+correctly. (A preprocessor definition does not affect #include statements, we therefore need to have both folders
+so that include file searching works and namespace mapping gets applied in the compiled library).
+
+[这样，它可以包含标准的USD标头（使用<boost/…>），但编译为foundryboost符号。
+为了解决这个问题，我们在foundryboost的命名空间boost中添加了一个预处理器定义，并复制了/symlink
+将<boost-root>/include/boost转换为<boost-rroot>/inclute/fundryboost。这样它就可以应用命名空间映射
+正确地。（预处理器定义不影响#include语句，因此我们需要同时拥有这两个文件夹
+以便在编译的库中应用文件搜索工作和名称空间映射）]
+
+## Testing the build
+Unit tests are automatically run post-build on Linux using the standalone/Houdini/Maya/Nuke version you are using. You can find each resolvers tests in its respective src/`<ResolverName>`/testenv folder.
+
+[ 单元测试在 Linux 上使用您正在使用的独立/Houdini/Maya/Nuke 版本后自动运行。您可以在每个解析器的 src/`<ResolverName>`/testenv 文件夹中找到每个解析器的测试]
+
+Alternatively you can run your application and check if the resolver executes correctly. If you didn't use our convenience script as noted above, you'll have to specify a few environment variables, so that our plugin is correctly detected by USD.
 
 [ 或者，您可以运行 Houdini/Maya 并检查解析器是否执行正确. 如果您没有使用上面提到的我们的便捷脚本，您需要指定几个环境变量，以便 USD 能够正确检测到我们的插件]
 
