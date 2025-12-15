@@ -22,11 +22,11 @@ We optionally can also hook into relative path identifier creation via Python.
 
 This can be enabled by setting the `AR_EXPOSE_RELATIVE_PATH_IDENTIFIERS` environment variable to `1` or by calling `pxr.Ar.GetUnderlyingResolver().SetExposeRelativePathIdentifierState(True)`.
 
-[ 可以通过将 AR_CACHEDRESOLVER_ENV_EXPOSE_RELATIVE_PATH_IDENTIFIERS 环境变量设置为 1 或调用 pxr.Ar.GetUnderlyingResolver().SetExposeRelativePathIdentifierState(True) 来启用此功能]
+[ 可以通过将 `AR_EXPOSE_RELATIVE_PATH_IDENTIFIERS` 环境变量设置为 `1` 或调用 `pxr.Ar.GetUnderlyingResolver().SetExposeRelativePathIdentifierState(True)` 来启用此功能]
 
 We then have access in our `PythonExpose.py` -> `Resolver.CreateRelativePathIdentifier` method. Here we can then return a non file path (anything that doesn't start with "/"/"./"/"../") identifier for our relative path, which then also gets passed to our `PythonExpose.py` -> `ResolverContext.ResolveAndCache` method.
 
-[ 然后我们可以在 PythonExpose.py -> Resolver.CreateRelativePathIdentifier 方法中进行访问. 然后，我们可以在这里返回相对路径的非文件路径（任何不以“/” “./” “../”开头的标识符），然后该标识符也会传递给我们的 PythonExpose.py 方法]
+[ 然后我们可以在 `PythonExpose.py` -> `Resolver.CreateRelativePathIdentifier` 方法中进行访问. 然后，我们可以在这里返回相对路径的非文件路径（任何不以“/” “./” “../”开头的标识符），然后该标识符也会传递给我们的 `PythonExpose.py -> ResolverContext.ResolveAndCache` 方法]
 
 This allows us to also redirect relative paths to our liking for example when implementing special pinning/mapping behaviours.
 
@@ -46,7 +46,7 @@ As identifiers are context independent, the cache is stored on the resolver itse
 
 We also have the option to expose any identifier, regardless of absolute/relative/search path based formatting to our `PythonExpose.py` -> `ResolverContext.ResolveAndCache` method by setting the `AR_EXPOSE_ABSOLUTE_PATH_IDENTIFIERS` environment variable to `1` or by calling `pxr.Ar.GetUnderlyingResolver().SetExposeAbsolutePathIdentifierState(True)`. As this then runs all paths through the Python exposed section, make sure that paths are batch added/pre-cached as much as possible to keep the resolve efficient.
 
-[ 我们还可以选择通过设置 AR_CACHEDRESOLVER_ENV_EXPOSE_ABSOLUTE_PATH_IDENTIFIERS 环境变量为 1 或通过调用 pxr.Ar.GetUnderlyingResolver().SetExposeAbsolutePathIdentifierState(True) 来公开任何标识符，无论基于绝对/相对/搜索路径的格式如何]
+[ 我们还可以选择通过设置 `AR_EXPOSE_ABSOLUTE_PATH_IDENTIFIERS` 环境变量为 `1` 或通过调用 `pxr.Ar.GetUnderlyingResolver().SetExposeAbsolutePathIdentifierState(True)` 来公开任何标识符，无论基于绝对/相对/搜索路径的格式如何]
 
 
 ```python
@@ -128,7 +128,7 @@ resolver.RefreshContext(context_collection)
 We can edit the mapping and cache via the resolver context.
 We also use these methods in the `PythonExpose.py` module.
 
-[ 我们可以通过解析器上下文编辑映射和缓存. 我们还在 PythonExpose.py 模块中使用这些方法]
+[ 我们可以通过解析器上下文编辑映射和缓存. 我们还在 `PythonExpose.py` 模块中使用这些方法]
 
 ```python
 import json
@@ -151,7 +151,7 @@ resolver.RefreshContext(context_collection)
 ```
 When the context is initialized for the first time, it runs the `ResolverContext.Initialize` method as described below. Here you can add any mapping and/or cached pairs as you see fit.
 
-[ 当上下文第一次初始化时，它将运行 ResolverContext.Initialize 方法，如下所述. 您可以在此处添加您认为合适的任何映射和/或缓存对]
+[ 当上下文第一次初始化时，它将运行 `ResolverContext.Initialize` 方法，如下所述. 您可以在此处添加您认为合适的任何映射和/或缓存对]
 
 ### Mapping/Caching Pairs [映射/缓存键值对]
 To inspect/tweak the active mapping/caching pairs, you can use the following:
@@ -197,13 +197,13 @@ As described in our [overview](./overview.md) section, the cache population is h
 You can find the basic implementation version that gets shipped with the compiled code here:
 [PythonExpose.py](https://github.com/LucaScheller/VFX-UsdAssetResolver/blob/main/src/CachedResolver/PythonExpose.py).
 
-[ 您可以在此处找到随编译代码一起提供的基本实现版本：PythonExpose.py]
+[ 您可以在此处找到随编译代码一起提供的基本实现版本：[PythonExpose.py](https://github.com/LucaScheller/VFX-UsdAssetResolver/blob/main/src/CachedResolver/PythonExpose.py)]
 
 ```admonish important
 You can live edit it after the compilation here: ${REPO_ROOT}/dist/cachedResolver/lib/python/PythonExpose.py (or resolvers.zip/CachedResolver/lib/python folder if you are using the pre-compiled releases).
 Since the code just looks for the `PythonExpose.py` file anywhere in the `sys.path` you can also move or re-create the file anywhere in the path to override the behaviour. The module name can be controlled by the `CMakeLists.txt` file in the repo root by setting `AR_CACHEDRESOLVER_USD_PYTHON_EXPOSE_MODULE_NAME` to a different name.
 
-[ 您可以在此处进行编译后实时编辑：${REPO_ROOT}/dist/cachedResolver/lib/python/PythonExpose.py（如果您使用的是预编译版本，则为 resolvers.zip/CachedResolver/lib/python 文件夹）. 由于代码只是在 sys.path 中的任何位置查找 PythonExpose.py 文件，因此您还可以在路径中的任何位置移动或重新创建该文件以覆盖该行为. 通过将 AR_CACHEDRESOLVER_USD_PYTHON_EXPOSE_MODULE_NAME 设置为不同的名称，可以通过存储库根目录中的 CMakeLists.txt 文件来控制模块名称]
+[ 您可以在此处进行编译后实时编辑：${REPO_ROOT}/dist/cachedResolver/lib/python/PythonExpose.py（如果您使用的是预编译版本，则为 resolvers.zip/CachedResolver/lib/python 文件夹）. 由于代码只是在 `sys.path` 中的任何位置查找 `PythonExpose.py` 文件，因此您还可以在路径中的任何位置移动或重新创建该文件以覆盖该行为. 通过将 `AR_CACHEDRESOLVER_USD_PYTHON_EXPOSE_MODULE_NAME` 设置为不同的名称，可以通过存储库根目录中的 `CMakeLists.txt` 文件来控制模块名称]
 
 You'll want to adjust the content, so that identifiers get resolved and cached to what your pipeline needs.
 
@@ -213,7 +213,7 @@ You'll want to adjust the content, so that identifiers get resolved and cached t
 ```admonish tip
 We also recommend checking out our unit tests of the resolver to see how to interact with it. You can find them in the `<Repo Root>/src/CachedResolver/testenv` folder or on [GitHub](https://github.com/LucaScheller/VFX-UsdAssetResolver/blob/main/src/CachedResolver/testenv/testCachedResolver.py).
 
-[ 我们还建议检查解析器的单元测试，以了解如何与其交互. 您可以在“\<Repo Root\>/src/CachedResolver/testenv”文件夹或 [GitHub](https://github.com/LucaScheller/VFX-UsdAssetResolver/blob/main/src/CachedResolver/testenv/testCachedResolver.py) 上找到它们]
+[ 我们还建议检查解析器的单元测试，以了解如何与其交互. 您可以在`<Repo Root>/src/CachedResolver/testenv`文件夹或 [GitHub](https://github.com/LucaScheller/VFX-UsdAssetResolver/blob/main/src/CachedResolver/testenv/testCachedResolver.py) 上找到它们]
 ```
 
 Below we show the Python exposed methods, note that we use static methods, as we just call into the module and don't create the actual object. (This module could just as easily been made up of pure functions, we just create the classes here to make it match the C++ API.)
@@ -222,7 +222,7 @@ Below we show the Python exposed methods, note that we use static methods, as we
 
 To enable a similar logging as the `TF_DEBUG` env var does, you can uncomment the following in the `log_function_args` function.
 
-[ 要启用与 TF_DEBUG 环境变量类似的日志记录，您可以取消注释 log_function_args 函数中的以下内容]
+[ 要启用与 `TF_DEBUG` 环境变量类似的日志记录，您可以取消注释 `log_function_args` 函数中的以下内容]
 
 ```python
 ...code...

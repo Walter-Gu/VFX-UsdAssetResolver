@@ -11,7 +11,7 @@ We use CMake as our build system and link against Houdini/Maya/Nuke to avoid hav
 
 Alternatively our build script also supports compiling against a self-compiled USD build (or pre-compiled build as for example [provided by Nvidia](https://developer.nvidia.com/usd)).
 
-[或者，我们的构建脚本还支持针对自编译的USD构建（或预编译的构建，例如[由Nvidia提供]）进行编译(https://developer.nvidia.com/usd))]
+[或者，我们的构建脚本还支持针对自编译的USD构建或预编译的构建，例如[由Nvidia提供](https://developer.nvidia.com/usd)]
 
 VFX DCC vendors try to keep in sync with the versions specified in the [VFX Reference Platform](https://vfxplatform.com), so if something doesn't work, first make sure that your software versions are supported.
 
@@ -20,11 +20,13 @@ VFX DCC vendors try to keep in sync with the versions specified in the [VFX Refe
 ```admonish warning
 Since the Usd Asset Resolver API changed with the AR 2.0 standard proposed in the [Asset Resolver 2.0 Specification](https://openusd.org/release/wp_ar2.html), you can only compile against Houdini versions 19.5 and higher/Maya versions 2024 and higher.
 
-[ 由于 Usd Asset Resolver API 随 Asset Resolver 2.0 规范中提出的 AR 2.0 标准而更改，因此您只能针对 Houdini 版本 19.5 及更高版本/Maya 2024 及更高版本进行编译]
+[ 由于 Usd Asset Resolver API 随 Asset Resolver 2.0 规范中提出的[AR 2.0 标准](https://openusd.org/release/wp_ar2.html)而更改，因此您只能针对 Houdini 版本 19.5 及更高版本/Maya 2024 及更高版本进行编译]
 ```
 
 ```admonish warning
 Certain applications (like Maya or Nuke) have additional build requirements, see our [building](./building.md) section for more information.
+
+[某些应用（如 Maya 或 Nuke）有额外的构建要求，详情请参见我们的[构建](./building.md)部分]
 ```
 
 ## Linux

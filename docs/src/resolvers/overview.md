@@ -72,7 +72,7 @@ ArGetResolver(): Using package resolver Usd_UsdzResolver for usdz from plugin us
 ### By loading the Python Module [通过Python模块加载]
 When importing the Python module, be sure to first import the Ar module, otherwise you might run into errors, as the resolver is not properly initialized:
 
-[ 导入 Pytho n模块时，请务必先导入 Ar 模块，否则可能会遇到错误，因为解析器未正确初始化]
+[ 导入 Python 模块时，请务必先导入 Ar 模块，否则可能会遇到错误，因为解析器未正确初始化]
 ~~~admonish info title=""
 ```bash
 # Start python via the aliased `usdpython`

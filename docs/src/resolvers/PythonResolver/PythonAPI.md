@@ -87,11 +87,11 @@ resolver.RefreshContext(context_collection)
 
 When the context is initialized for the first time, it runs the `ResolverContext.LoadOrRefreshData` method as described below. After that is is just a serialized .json dict with at minimum the `PythonResolver.Tokens.mappingPairs`and `PythonResolver.Tokens.searchPaths` tokens being set.
 
-[ 当上下文第一次初始化时，它将运行 ResolverContext.LoadOrRefreshData 方法，之后只是一个序列化的 .json 字典，至少设置了 PythonResolver.Tokens.mappingPairs 和 PythonResolver.Tokens.searchPaths 标记]
+[ 当上下文第一次初始化时，它将运行 `ResolverContext.LoadOrRefreshData` 方法，之后只是一个序列化的 .json 字典，至少设置了 `PythonResolver.Tokens.mappingPairs` 和 `PythonResolver.Tokens.searchPaths` 标记]
 
 Additionally the `PythonResolver.Tokens.mappingRegexExpression`/`PythonResolver.Tokens.mappingRegexFormat` keys can be set to support regex substitution before doing the mapping pair lookup.
 
-[ 此外可以将 PythonResolver.Tokens.mappingRegexExpression / PythonResolver.Tokens.mappingRegexFormat 键设置为在进行映射对查找之前支持正则表达式替换]
+[ 此外可以将 `PythonResolver.Tokens.mappingRegexExpression` / `PythonResolver.Tokens.mappingRegexFormat` 键设置为在进行映射对查找之前支持正则表达式替换]
 
 ### PythonExpose.py Overview
 
@@ -102,13 +102,13 @@ The rest of the Python API is actually the fully exposed resolver.
 You can find the fully implemented version that gets shipped with the compiled code here:
 [PythonExpose.py](https://github.com/LucaScheller/VFX-UsdAssetResolver/blob/main/src/PythonResolver/PythonExpose.py). This file has feature parity to the [File Resolver](../FileResolver/overview.md). It is also quite close to the native default file resolver that ships with Usd.
 
-[ 您可以在此处找到随编译代码一起提供的完全实现的版本：PythonExpose.py 该文件具有与文件解析器相同的功能, 它也非常接近于 Usd 附带的本机默认文件解析器]
+[ 您可以在此处找到随编译代码一起提供的完全实现的版本：[PythonExpose.py](https://github.com/LucaScheller/VFX-UsdAssetResolver/blob/main/src/PythonResolver/PythonExpose.py) 该文件具有与文件解析器相同的功能, 它也非常接近于 Usd 附带的默认[File Resolver](../FileResolver/overview.md)]
 
 ```admonish important
-You can live edit it after the compilation here: ${REPO_ROOT}/dist/pythonResolver/lib/python/PythonExpose.py.
+You can live edit it after the compilation here: `${REPO_ROOT}/dist/pythonResolver/lib/python/PythonExpose.py`.
 Since the code just looks for the `PythonExpose.py` file anywhere in the `sys.path` you can also move or re-create the file anywhere in the path to override the behaviour. The module name can be controlled by the `CMakeLists.txt` file in the repo root by setting `AR_PYTHONRESOLVER_USD_PYTHON_EXPOSE_MODULE_NAME` to a different name.
 
-[ 您可以在编译后对其进行实时编辑：${REPO_ROOT}/dist/pythonResolver/lib/python/PythonExpose.py 由于代码只是在 sys.path 中的任何位置查找 PythonExpose.py 文件，因此您还可以在路径中的任何位置移动或重新创建该文件以覆盖该行为 通过将 AR_PYTHONRESOLVER_USD_PYTHON_EXPOSE_MODULE_NAME 设置为不同的名称，可以通过存储库根目录中的 CMakeLists.txt 文件来控制模块名称]
+[ 您可以在编译后对其进行实时编辑：`${REPO_ROOT}/dist/pythonResolver/lib/python/PythonExpose.py` 由于代码只是在 `sys.path` 中的任何位置查找 `PythonExpose.py` 文件，因此您还可以在路径中的任何位置移动或重新创建该文件以覆盖该行为 通过将 `AR_PYTHONRESOLVER_USD_PYTHON_EXPOSE_MODULE_NAME` 设置为不同的名称，可以通过存储库根目录中的 `CMakeLists.txt` 文件来控制模块名称]
 ```
 
 Below we show the Python exposed methods, note that we use static methods, as we just call into the module and don't create the actual object. (This module could just as easily been made up of pure functions, we just create the classes here to make it match the C++ API.)
@@ -121,7 +121,7 @@ The method signatures match the C++ signatures, except how the context is inject
 
 To enable a similar logging as the `TF_DEBUG` env var does, you can uncomment the following in the `log_function_args` function.
 
-[ 要启用与 TF_DEBUG 环境变量类似的日志记录，您可以取消注释 log_function_args 函数中的以下内容]
+[ 要启用与 `TF_DEBUG` 环境变量类似的日志记录，您可以取消注释 `log_function_args` 函数中的以下内容]
 
 ```python
 ...code...

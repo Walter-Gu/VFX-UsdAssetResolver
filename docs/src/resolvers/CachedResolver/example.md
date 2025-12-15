@@ -6,7 +6,7 @@ In this example we examine how a possible production setup would look like.
 
 We enable the advanced feature of exposing relative identifiers to Python by setting the `AR_EXPOSE_RELATIVE_PATH_IDENTIFIERS` environment variable to `1`.
 
-[ 我们通过将 AR_EXPOSE_RELATIVE_PATH_IDENTIFIERS 环境变量设置为 1 来启用向 Python 公开相对标识符的高级功能]
+[ 我们通过将 `AR_EXPOSE_RELATIVE_PATH_IDENTIFIERS` 环境变量设置为 `1` 来启用向 Python 公开相对标识符的高级功能]
 
 ## Prerequisites [先决条件]
 
@@ -35,7 +35,7 @@ set AR_EXPOSE_RELATIVE_PATH_IDENTIFIERS=1
 
 You'll also need to adjust the `shotA_mapping.usd` to point to absolute file paths:
 
-[ 您还需要调整 shotA_mapping.usd 以指向绝对文件路径]
+[ 您还需要调整 `shotA_mapping.usd` 以指向绝对文件路径]
 
 ```python
 #usda 1.0
@@ -58,13 +58,13 @@ Let's have a look how we can demo this setup in Houdini.
 ### Loading our Shot
 If everything was initialized correctly, we can sublayer in the shot A USD file by referring to it via `shots/shotA`
 
-[ 如果一切都正确初始化，我们可以通过 shots/shotsA 引用 shot A USD 文件来对其进行子分层]
+[ 如果一切都正确初始化，我们可以通过 `shots/shotA` 引用 shot A USD 文件来对其进行子分层]
 
 ![Houdini Shot](./media/ProductionExampleHoudiniShot.png)
 
-Let's inspect what is happening in our `PythonExpose.py`` file:
+Let's inspect what is happening in our `PythonExpose.py` file:
 
-[ 让我们检查一下“PythonExpose.py”文件中发生了什么]
+[ 让我们检查一下`PythonExpose.py`文件中发生了什么]
 
 ```python
 ...
@@ -120,7 +120,7 @@ With both methods, we need a pinning mechanism (as well as when we typically sub
 
 We provide this by either live modifying the context (see the [Python API](./PythonAPI.md) section) or by providing a pinning file.
 
-    [ 我们通过实时修改上下文（请参阅 Python API 部分）或提供固定文件来提供此功能]
+    [ 我们通过实时修改上下文(请参阅 Python API) 或提供固定文件来提供此功能]
 
 ### Loading Pinning
 We can load our pinning via a configure stage node or via the lop network settings, more info on that can be found in the [USD Survival Guide - Asset Resolver](https://lucascheller.github.io/VFX-UsdSurvivalGuide/dcc/houdini/approach.html#compositionAssetResolver) section.
@@ -261,6 +261,7 @@ And that's all folks! We encourage you to also play around with the code or adju
 [ 各位，以上就是全部内容了！我们鼓励您尝试修改代码或调整映射文件，以查看它们是如何工作的]
 
 If you make live adjustments via the API, don't forget to refresh the context as described in our [Python API](./PythonAPI.md#refreshing-the-resolver-context) section.
+
 [ 如果您通过 API 进行实时调整，请不要忘记刷新上下文，如我们的 Python API 部分中所述]
 
 

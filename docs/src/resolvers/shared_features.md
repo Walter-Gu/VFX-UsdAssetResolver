@@ -21,19 +21,19 @@
 #// ANCHOR: resolverSharedFeatures
 - A simple mapping pair look up in a provided mapping pair Usd file. The mapping data has to be stored in the Usd layer metadata in an key called ```mappingPairs``` as an array with the syntax ```["sourcePathA.usd", "targetPathA.usd", "sourcePathB.usd", "targetPathB.usd"]```. (This is quite similar to Rodeo's asset resolver that can be found [here](https://github.com/rodeofx/rdo_replace_resolver) using the AR 1.0 specification.)
 
-    [ 在提供的映射键值对 USD 文件中进行简单的映射查找. 映射数据必须以数组形式存储在 Usd 层元数据中名为 mappingPairs 的键中，其语法为["sourcePathA.usd", "targetPathA.usd", "sourcePathB.usd", "targetPathB.usd"].（这与Rodeo的资产解析器非常相似，该解析器可以在[这里](https://github.com/rodeofx/rdo_replace_resolver)使用AR 1.0规范找到）]
+    [ 在提供的映射键值对 USD 文件中进行简单的映射查找. 映射数据必须以数组形式存储在 Usd 层元数据中名为 `mappingPairs` 的键中，其语法为`["sourcePathA.usd", "targetPathA.usd", "sourcePathB.usd", "targetPathB.usd"]`.（这与Rodeo的资产解析器非常相似，该解析器可以在[这里](https://github.com/rodeofx/rdo_replace_resolver)使用AR 1.0规范找到）]
 - The search path environment variable by default is ```AR_SEARCH_PATHS```. It can be customized in the [CMakeLists.txt](https://github.com/LucaScheller/VFX-UsdAssetResolver/blob/main/CMakeLists.txt) file.
 
-    [ 搜索路径的环境变量默认是 AR_SEARCH_PATHS. 可以在 CMakeLists.txt 文件中进行自定义]
+    [ 搜索路径的环境变量默认是 AR_SEARCH_PATHS. 可以在 [CMakeLists.txt](https://github.com/LucaScheller/VFX-UsdAssetResolver/blob/main/CMakeLists.txt) 文件中进行自定义]
 - You can use the ```AR_ENV_SEARCH_REGEX_EXPRESSION```/```AR_ENV_SEARCH_REGEX_FORMAT``` environment variables to preformat any asset paths before they looked up in the ```mappingPairs```. The regex match found by the ```AR_ENV_SEARCH_REGEX_EXPRESSION``` environment variable will be replaced by the content of the  ```AR_ENV_SEARCH_REGEX_FORMAT``` environment variable. The environment variable names can be customized in the [CMakeLists.txt](https://github.com/LucaScheller/VFX-UsdAssetResolver/blob/main/CMakeLists.txt) file.
 
-    [ 您可以使用 AR_ENV_SEARCH_REGEX_EXPRESSION / AR_ENV_SEARCH_REGEX_FORMAT 环境变量在 mappingPairs 中查找任何资源路径之前对其进行预格式化. AR_ENV_SEARCH_REGEX_EXPRESSION 环境变量找到的正则表达式匹配将替换为 AR_ENV_SEARCH_REGEX_FORMAT 环境变量的内容. 这些环境变量的名称可以在 CMakeLists.txt 文件中进行自定义]
+    [ 您可以使用 `AR_ENV_SEARCH_REGEX_EXPRESSION` / `AR_ENV_SEARCH_REGEX_FORMAT` 环境变量在 `mappingPairs` 中查找任何资源路径之前对其进行预格式化. `AR_ENV_SEARCH_REGEX_EXPRESSION` 环境变量找到的正则表达式匹配将替换为 AR_ENV_SEARCH_REGEX_FORMAT 环境变量的内容. 这些环境变量的名称可以在 [CMakeLists.txt](https://github.com/LucaScheller/VFX-UsdAssetResolver/blob/main/CMakeLists.txt) 文件中进行自定义]
 - The resolver contexts are cached globally, so that DCCs, that try to spawn a new context based on the same mapping file using the [```Resolver.CreateDefaultContextForAsset```](https://openusd.org/dev/api/class_ar_resolver.html), will re-use the same cached resolver context. The resolver context cache key is currently the mapping file path. This may be subject to change, as a hash might be a good alternative, as it could also cover non file based edits via the exposed Python resolver API.
 
-    [ 解析器上下文是全局缓存的，因此，当 DCC 软件尝试使用 Resolver.CreateDefaultContextForAsset 基于相同的映射文件创建新的上下文时，会重用相同的缓存解析器上下文. 解析器上下文缓存键当前是映射文件的路径. 这可能会发生变化，因为哈希可能是一个不错的选择，因为它也可以通过公开的 Python 解析器 API 覆盖非基于文件的编辑]
+    [ 解析器上下文是全局缓存的，因此，当 DCC 软件尝试使用 [```Resolver.CreateDefaultContextForAsset```](https://openusd.org/dev/api/class_ar_resolver.html) 基于相同的映射文件创建新的上下文时，会重用相同的缓存解析器上下文. 解析器上下文缓存键当前是映射文件的路径. 这可能会发生变化，因为哈希可能是一个不错的选择，因为它也可以通过公开的 Python 解析器 API 覆盖非基于文件的编辑]
 - ```Resolver.CreateContextFromString```/```Resolver.CreateContextFromStrings``` is not implemented due to many DCCs not making use of it yet. As we expose the ability to edit the context at runtime, this is also often not necessary. If needed please create a request by submitting an issue here: [Create New Issue](https://github.com/LucaScheller/VFX-UsdAssetResolver/issues/new)
 
-    [ 由于许多 DCC 软件尚未使用 Resolver.CreateContextFromString/Resolver.CreateContextFromStrings，因此尚未实现这些功能. 由于我们公开了在运行时编辑上下文的能力，因此这通常也是不必要的. 如有需要，请通过在此处提交问题来创建请求：[创建新问题](https://github.com/LucaScheller/VFX-UsdAssetResolver/issues/new)
+    [ 由于许多 DCC 软件尚未使用 `Resolver.CreateContextFromString/Resolver.CreateContextFromStrings`，因此尚未实现这些功能. 由于我们公开了在运行时编辑上下文的能力，因此这通常也是不必要的. 如有需要，请通过在此处提交问题来创建请求：[创建新问题](https://github.com/LucaScheller/VFX-UsdAssetResolver/issues/new)
 ]
 #// ANCHOR_END: resolverSharedFeatures
 
@@ -51,7 +51,7 @@
 
 The resolver uses these env vars to resolve non absolute asset paths relative to the directories specified by `AR_SEARCH_PATHS`. For example the following substitutes any occurrence of `v<3digits>` with `v000` and then looks up that asset path in the mapping pairs.
 
-[ 解析器使用这些环境变量来解决非绝对路径资源，这些路径相对于由 AR_SEARCH_PATHS 指定的目录. 例如，以下操作会将任何 v<3digits> 的出现替换为 v000，然后在映射对中查找该资源路径]
+[ 解析器使用这些环境变量来解决非绝对路径资源，这些路径相对于由 `AR_SEARCH_PATHS` 指定的目录. 例如，以下操作会将任何 `v<3digits>` 的出现替换为 `v000`，然后在映射对中查找该资源路径]
 
 ~~~admonish info title=""
 ```bash
